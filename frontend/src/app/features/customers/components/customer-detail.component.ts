@@ -33,7 +33,7 @@ import { ApiService } from '@core/services/api.service';
             <h3>Business Details</h3>
             <p><strong>Industry:</strong> {{ customer.industry || 'N/A' }}</p>
             <p><strong>Status:</strong> <span class="status-badge" [ngClass]="customer.status?.toLowerCase()">{{ customer.status }}</span></p>
-            <p><strong>Revenue:</strong> \${{ customer.annualRevenue | number }}</p>
+            <p><strong>Revenue:</strong> <span>$</span>{{ customer.annualRevenue | number }}</p>
             <p><strong>Employees:</strong> {{ customer.numberOfEmployees || 'N/A' }}</p>
           </div>
         </div>

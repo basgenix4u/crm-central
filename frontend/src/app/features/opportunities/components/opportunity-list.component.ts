@@ -19,7 +19,7 @@ import { ApiService } from '@core/services/api.service';
         <table mat-table [dataSource]="items" class="data-table">
           <ng-container matColumnDef="name"><th mat-header-cell *matHeaderCellDef>Name</th><td mat-cell *matCellDef="let r">{{ r.name }}</td></ng-container>
           <ng-container matColumnDef="stage"><th mat-header-cell *matHeaderCellDef>Stage</th><td mat-cell *matCellDef="let r"><span class="status-badge qualified">{{ r.stage }}</span></td></ng-container>
-          <ng-container matColumnDef="amount"><th mat-header-cell *matHeaderCellDef>Amount</th><td mat-cell *matCellDef="let r">${{ r.amount | number }}</td></ng-container>
+          <ng-container matColumnDef="amount"><th mat-header-cell *matHeaderCellDef>Amount</th><td mat-cell *matCellDef="let r"><span>$</span>{{ r.amount | number }}</td></ng-container>
           <ng-container matColumnDef="probability"><th mat-header-cell *matHeaderCellDef>Probability</th><td mat-cell *matCellDef="let r">{{ r.probability }}%</td></ng-container>
           <ng-container matColumnDef="closeDate"><th mat-header-cell *matHeaderCellDef>Close Date</th><td mat-cell *matCellDef="let r">{{ r.expectedCloseDate }}</td></ng-container>
           <ng-container matColumnDef="actions"><th mat-header-cell *matHeaderCellDef></th><td mat-cell *matCellDef="let r"><button mat-icon-button (click)="deleteItem(r.id)"><mat-icon>delete</mat-icon></button></td></ng-container>

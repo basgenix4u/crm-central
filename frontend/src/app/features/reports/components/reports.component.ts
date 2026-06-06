@@ -16,13 +16,13 @@ import { DashboardData } from '@core/models';
       <mat-tab-group>
         <mat-tab label="Sales Reports">
           <div class="stats-grid" style="margin-top:24px;">
-            <div class="stat-card"><div class="stat-icon" style="background:#4caf50;"><mat-icon>attach_money</mat-icon></div><div class="stat-info"><div class="stat-value">\${{ data?.totalRevenue | number:'1.0-0' }}</div><div class="stat-label">Total Revenue</div></div></div>
+            <div class="stat-card"><div class="stat-icon" style="background:#4caf50;"><mat-icon>attach_money</mat-icon></div><div class="stat-info"><div class="stat-value"><span>$</span>{{ data?.totalRevenue | number:'1.0-0' }}</div><div class="stat-label">Total Revenue</div></div></div>
             <div class="stat-card"><div class="stat-icon" style="background:#1976d2;"><mat-icon>trending_up</mat-icon></div><div class="stat-info"><div class="stat-value">{{ data?.totalOpportunities }}</div><div class="stat-label">Total Deals</div></div></div>
-            <div class="stat-card"><div class="stat-icon" style="background:#ff9800;"><mat-icon>speed</mat-icon></div><div class="stat-info"><div class="stat-value">\${{ data?.avgDealSize | number:'1.0-0' }}</div><div class="stat-label">Avg Deal Size</div></div></div>
+            <div class="stat-card"><div class="stat-icon" style="background:#ff9800;"><mat-icon>speed</mat-icon></div><div class="stat-info"><div class="stat-value"><span>$</span>{{ data?.avgDealSize | number:'1.0-0' }}</div><div class="stat-label">Avg Deal Size</div></div></div>
           </div>
           <div class="card"><h3>Pipeline Distribution</h3>
             <div style="margin-top:16px;" *ngFor="let entry of getPipelineEntries()">
-              <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>{{ entry[0] }}</span><span>{{ entry[1]?.count }} deals · \${{ entry[1]?.amount | number:'1.0-0' }}</span></div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>{{ entry[0] }}</span><span>{{ entry[1]?.count }} deals · <span>$</span>{{ entry[1]?.amount | number:'1.0-0' }}</span></div>
               <div style="height:8px;background:#f0f0f0;border-radius:4px;overflow:hidden;margin-bottom:12px;"><div style="height:100%;background:#1976d2;border-radius:4px;" [style.width.%]="getBarWidth(entry[1]?.amount)"></div></div>
             </div>
           </div>

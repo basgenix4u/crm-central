@@ -21,7 +21,7 @@ import { ApiService } from '@core/services/api.service';
       <div class="stats-grid" style="margin-bottom:24px;">
         <div class="stat-card">
           <div class="stat-icon" style="background:#4caf50;"><mat-icon>attach_money</mat-icon></div>
-          <div class="stat-info"><div class="stat-value">\${{ totalRevenue | number }}</div><div class="stat-label">Total Pipeline Value</div></div>
+          <div class="stat-info"><div class="stat-value"><span>$</span>{{ totalRevenue | number }}</div><div class="stat-label">Total Pipeline Value</div></div>
         </div>
         <div class="stat-card">
           <div class="stat-icon" style="background:#1976d2;"><mat-icon>trending_up</mat-icon></div>
@@ -29,7 +29,7 @@ import { ApiService } from '@core/services/api.service';
         </div>
         <div class="stat-card">
           <div class="stat-icon" style="background:#ff9800;"><mat-icon>speed</mat-icon></div>
-          <div class="stat-info"><div class="stat-value">\${{ avgDealSize | number:'1.0-0' }}</div><div class="stat-label">Avg Deal Size</div></div>
+          <div class="stat-info"><div class="stat-value"><span>$</span>{{ avgDealSize | number:'1.0-0' }}</div><div class="stat-label">Avg Deal Size</div></div>
         </div>
       </div>
 
@@ -45,7 +45,7 @@ import { ApiService } from '@core/services/api.service';
             <div class="pipeline-card" *ngFor="let opp of getStageItems(stage.value)" cdkDrag>
               <div class="deal-name">{{ opp.name }}</div>
               <div class="deal-company">{{ opp.customer?.company || 'No company' }}</div>
-              <div class="deal-amount">\${{ opp.amount | number }}</div>
+              <div class="deal-amount"><span>$</span>{{ opp.amount | number }}</div>
               <div style="display:flex;justify-content:space-between;margin-top:8px;">
                 <small style="color:#999;">{{ opp.probability }}% likely</small>
                 <small style="color:#999;">{{ opp.expectedCloseDate }}</small>

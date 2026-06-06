@@ -20,7 +20,7 @@ import { ApiService } from '@core/services/api.service';
           <ng-container matColumnDef="name"><th mat-header-cell *matHeaderCellDef>Name</th><td mat-cell *matCellDef="let r">{{ r.name }}</td></ng-container>
           <ng-container matColumnDef="type"><th mat-header-cell *matHeaderCellDef>Type</th><td mat-cell *matCellDef="let r">{{ r.type }}</td></ng-container>
           <ng-container matColumnDef="status"><th mat-header-cell *matHeaderCellDef>Status</th><td mat-cell *matCellDef="let r"><span class="status-badge" [ngClass]="r.status?.toLowerCase()">{{ r.status }}</span></td></ng-container>
-          <ng-container matColumnDef="budget"><th mat-header-cell *matHeaderCellDef>Budget</th><td mat-cell *matCellDef="let r">\${{ r.budget | number }}</td></ng-container>
+          <ng-container matColumnDef="budget"><th mat-header-cell *matHeaderCellDef>Budget</th><td mat-cell *matCellDef="let r"><span>$</span>{{ r.budget | number }}</td></ng-container>
           <ng-container matColumnDef="leads"><th mat-header-cell *matHeaderCellDef>Leads</th><td mat-cell *matCellDef="let r">{{ r.leadsGenerated }}</td></ng-container>
           <tr mat-header-row *matHeaderRowDef="['name','type','status','budget','leads']"></tr>
           <tr mat-row *matRowDef="let row; columns: ['name','type','status','budget','leads'];"></tr>

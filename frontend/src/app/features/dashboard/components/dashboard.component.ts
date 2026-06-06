@@ -48,11 +48,11 @@ import { DashboardData } from '@core/models';
             <div class="revenue-stats">
               <div class="revenue-item">
                 <span class="revenue-label">Total Revenue</span>
-                <span class="revenue-value">\${{ data?.totalRevenue | number:'1.0-0' }}</span>
+                <span class="revenue-value"><span>$</span>{{ data?.totalRevenue | number:'1.0-0' }}</span>
               </div>
               <div class="revenue-item">
                 <span class="revenue-label">Avg Deal Size</span>
-                <span class="revenue-value">\${{ data?.avgDealSize | number:'1.0-0' }}</span>
+                <span class="revenue-value"><span>$</span>{{ data?.avgDealSize | number:'1.0-0' }}</span>
               </div>
               <div class="revenue-item">
                 <span class="revenue-label">Win Rate</span>
