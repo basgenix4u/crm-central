@@ -1,0 +1,65 @@
+# Render.com Blueprint - Infrastructure as Code
+# Deploy everything with one click
+
+databases:
+  - name: crm-central-db
+    plan: free
+    databaseName: crmcentral
+    user: crmcentral
+    postgresMajorVersion: "16"
+
+services:
+  # Backend API
+  - type: web
+    name: crm-central-api
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    plan: free
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: DB_HOST
+        fromDatabase:
+          name: crm-central-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: crm-central-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: crm-central-db
+          property: database
+      - key: DB_USERNAME
+        fromDatabase:
+          name: crm-central-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: crm-central-db
+          property: password
+      - key: REDIS_HOST
+        value: ""
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CORS_ORIGINS
+        value: "*"
+      - key: SERVER_PORT
+        value: "8080"
+    healthCheckPath: /api/actuator/health
+
+  # Frontend
+  - type: web
+    name: crm-central-frontend
+    runtime: static
+    buildCommand: cd frontend && npm install && npm run build -- --configuration production
+    staticPublishPath: frontend/dist/crm-central/browser
+    pullRequestPreviewsEnabled: true
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: public, max-age=86400
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
