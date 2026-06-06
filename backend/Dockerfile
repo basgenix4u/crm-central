@@ -1,15 +1,12 @@
-FROM eclipse-temurin:21-jdk-alpine AS build
+FROM maven:3.9.6-eclipse-temurin-21-alpine AS build
 WORKDIR /app
 COPY pom.xml .
-# Download dependencies first (cached layer)
-RUN apk add --no-cache maven && mvn dependency:go-offline -B 2>/dev/null || true
+RUN mvn dependency:resolve -q 2>/dev/null || true
 COPY src ./src
-RUN mvn clean package -DskipTests -q
+RUN mvn package -DskipTests -q -T 1C
 
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
-RUN addgroup -S spring && adduser -S spring -G spring
-USER spring:spring
 EXPOSE 8080
-ENTRYPOINT ["java", "-Xmx256m", "-Xms128m", "-XX:+UseSerialGC", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-Xmx256m", "-Xms128m", "-XX:+UseSerialGC", "-XX:MaxMetaspaceSize=128m", "-jar", "app.jar"]
