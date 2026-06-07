@@ -7,6 +7,8 @@ import { MatTableModule } from '@angular/material/table';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '@env/environment';
@@ -17,12 +19,12 @@ import { UploadDialogComponent } from './upload-dialog.component';
 
 @Component({
   selector: 'app-document-list', standalone: true,
-  imports: [CommonModule, MatCardModule, MatIconModule, MatButtonModule, MatTableModule, MatProgressSpinnerModule, MatProgressBarModule, MatChipsModule, MatDialogModule],
+  imports: [CommonModule, MatCardModule, MatIconModule, MatButtonModule, MatTableModule, MatProgressSpinnerModule, MatProgressBarModule, MatChipsModule, MatTooltipModule, MatMenuModule, MatDialogModule],
   template: `
     <div class="page-container">
       <div class="page-header">
         <h1>Documents</h1>
-        <button mat-raised-button color="primary" (click)="openUpload()"><mat-icon>cloud_upload</mat-icon> Upload Document</button>
+        <button mat-raised-button color="primary" (click)="openUpload()"><mat-icon>cloud_upload</mat-icon> Upload</button>
       </div>
 
       <div *ngIf="uploading" class="card" style="margin-bottom:16px;">
@@ -45,22 +47,28 @@ import { UploadDialogComponent } from './upload-dialog.component';
           <ng-container matColumnDef="size"><th mat-header-cell *matHeaderCellDef>Size</th>
             <td mat-cell *matCellDef="let r">{{ formatSize(r.fileSize) }}</td>
           </ng-container>
-          <ng-container matColumnDef="uploadedBy"><th mat-header-cell *matHeaderCellDef>Uploaded By</th>
+          <ng-container matColumnDef="uploadedBy"><th mat-header-cell *matHeaderCellDef>By</th>
             <td mat-cell *matCellDef="let r">{{ r.uploadedBy?.firstName }} {{ r.uploadedBy?.lastName }}</td>
           </ng-container>
           <ng-container matColumnDef="date"><th mat-header-cell *matHeaderCellDef>Date</th>
             <td mat-cell *matCellDef="let r">{{ r.createdAt | date:'mediumDate' }}</td>
           </ng-container>
           <ng-container matColumnDef="actions"><th mat-header-cell *matHeaderCellDef></th>
-            <td mat-cell *matCellDef="let r"><button mat-icon-button color="warn" (click)="del(r.id)"><mat-icon>delete</mat-icon></button></td>
+            <td mat-cell *matCellDef="let r">
+              <button mat-icon-button [matMenuTriggerFor]="docMenu" matTooltip="Actions"><mat-icon>more_vert</mat-icon></button>
+              <mat-menu #docMenu="matMenu">
+                <button mat-menu-item (click)="viewDoc(r)"><mat-icon>visibility</mat-icon> View / Open</button>
+                <button mat-menu-item (click)="del(r.id)"><mat-icon>delete</mat-icon> Delete</button>
+              </mat-menu>
+            </td>
           </ng-container>
           <tr mat-header-row *matHeaderRowDef="cols"></tr>
-          <tr mat-row *matRowDef="let row; columns: cols;"></tr>
+          <tr mat-row *matRowDef="let row; columns: cols;" style="cursor:pointer;" (click)="viewDoc(row)"></tr>
         </table>
         <div *ngIf="!loading && documents.length === 0" class="empty-state">
           <mat-icon class="empty-icon">folder_open</mat-icon>
-          <h3>No documents uploaded yet</h3>
-          <p>Upload contracts, proposals, invoices, and other business files.</p>
+          <h3>No documents yet</h3>
+          <p>Upload contracts, proposals, invoices, and other business files.<br>Documents can be shared across your team.</p>
           <button mat-raised-button color="primary" (click)="openUpload()" style="margin-top:16px;"><mat-icon>cloud_upload</mat-icon> Upload First Document</button>
         </div>
       </div>
@@ -81,17 +89,30 @@ export class DocumentListComponent implements OnInit {
     ref.afterClosed().subscribe(result => {
       if (result?.file) {
         this.uploading = true;
-        const formData = new FormData();
-        formData.append('file', result.file);
-        if (result.type) formData.append('type', result.type);
-        if (result.description) formData.append('description', result.description);
+        const fd = new FormData();
+        fd.append('file', result.file);
+        if (result.type) fd.append('type', result.type);
+        if (result.description) fd.append('description', result.description);
         const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + this.auth.getToken() });
-        this.http.post<any>(environment.apiUrl + '/documents', formData, { headers }).subscribe({
+        this.http.post<any>(environment.apiUrl + '/documents', fd, { headers }).subscribe({
           next: () => { this.uploading = false; this.notify.success('Document uploaded!'); this.load(); },
-          error: (e) => { this.uploading = false; this.notify.error('Upload failed: ' + (e.error?.message || e.message)); }
+          error: (e) => { this.uploading = false; this.notify.error('Upload failed'); }
         });
       }
     });
+  }
+
+  viewDoc(doc: any) {
+    // For uploaded documents, open a preview dialog with the document info
+    // Since files are stored on server, we show metadata and content type info
+    const info = `📄 ${doc.originalName || doc.name}\n\n` +
+      `Type: ${doc.type || 'Unknown'}\n` +
+      `Size: ${this.formatSize(doc.fileSize)}\n` +
+      `Uploaded by: ${doc.uploadedBy?.firstName || ''} ${doc.uploadedBy?.lastName || ''}\n` +
+      `Date: ${new Date(doc.createdAt).toLocaleDateString()}\n` +
+      `Description: ${doc.description || 'None'}\n\n` +
+      `Content Type: ${doc.contentType}`;
+    alert(info);
   }
 
   del(id: string) { if (confirm('Delete this document?')) this.api.delete('documents/' + id).subscribe({ next: () => { this.notify.success('Deleted'); this.load(); }}); }
