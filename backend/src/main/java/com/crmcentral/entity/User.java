@@ -1,6 +1,9 @@
 package com.crmcentral.entity;
 
 import com.crmcentral.enums.UserRole;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
@@ -25,6 +28,7 @@ public class User extends BaseEntity {
     private String email;
 
     @Column(nullable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     private String phone;
@@ -47,10 +51,12 @@ public class User extends BaseEntity {
     private int failedLoginAttempts;
     private LocalDateTime lockedUntil;
 
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "manager_id")
     private User manager;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "manager")
     @Builder.Default
     private Set<User> teamMembers = new HashSet<>();

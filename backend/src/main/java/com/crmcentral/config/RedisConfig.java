@@ -13,8 +13,18 @@ import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import java.time.Duration;
 
+/**
+ * Redis configuration - only activates when spring.data.redis.host is explicitly set
+ * to a non-empty value. When deploying without Redis (e.g. Render free tier),
+ * leave REDIS_HOST empty and set CACHE_TYPE=simple to use in-memory caching instead.
+ *
+ * Spring Boot 3.2.x @ConditionalOnProperty does NOT support a "negated" attribute.
+ * To conditionally enable this config only when a Redis host is provided,
+ * we use matchIfMissing=false (don't load if property is absent) and omit havingValue
+ * so any non-empty value will activate the config.
+ */
 @Configuration
-@ConditionalOnProperty(name = "spring.data.redis.host", matchIfMissing = false, havingValue = "", negated = true)
+@ConditionalOnProperty(name = "spring.data.redis.host", matchIfMissing = false)
 public class RedisConfig {
 
     @Bean

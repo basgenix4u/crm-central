@@ -2,6 +2,7 @@ package com.crmcentral.entity;
 
 import com.crmcentral.enums.CampaignStatus;
 import com.crmcentral.enums.CampaignType;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import java.math.BigDecimal;
@@ -48,6 +49,7 @@ public class Campaign extends BaseEntity {
     private String targetIndustry;
     private String targetRegion;
 
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id")
     private User owner;

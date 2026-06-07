@@ -1,5 +1,6 @@
 package com.crmcentral.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.HashSet;
@@ -31,6 +32,7 @@ public class KnowledgeBaseArticle extends BaseEntity {
     @Builder.Default
     private Set<String> tags = new HashSet<>();
 
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id")
     private User author;
