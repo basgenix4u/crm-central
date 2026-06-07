@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@Component
+// @Component -- disabled for initial deploy
 public class RateLimitConfig implements Filter {
 
     private final Map<String, AtomicInteger> requestCounts = new ConcurrentHashMap<>();
