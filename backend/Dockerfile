@@ -8,5 +8,4 @@ FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 COPY --from=builder /build/target/app.jar app.jar
 EXPOSE 8080
-ENV JAVA_OPTS="-Xmx300m -Xms150m -XX:+UseSerialGC -XX:MaxMetaspaceSize=96m -Djava.security.egd=file:/dev/./urandom -Dspring.jmx.enabled=false"
-CMD java $JAVA_OPTS -jar app.jar
+ENTRYPOINT ["java", "-Xmx300m", "-Xms150m", "-XX:+UseSerialGC", "-jar", "app.jar"]
