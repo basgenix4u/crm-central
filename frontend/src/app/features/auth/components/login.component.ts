@@ -13,20 +13,19 @@ import { AuthService } from '@core/services/auth.service';
 import { NotificationService } from '@core/services/notification.service';
 
 @Component({
-  selector: 'app-login',
-  standalone: true,
+  selector: 'app-login', standalone: true,
   imports: [CommonModule, FormsModule, RouterLink, MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatCheckboxModule, MatProgressSpinnerModule],
   template: `
     <div class="auth-container">
       <div class="auth-card">
         <div class="auth-header">
           <mat-icon class="auth-logo">hub</mat-icon>
-          <h1>CRM Central</h1>
-          <p>Sign in to your account</p>
+          <h1>Welcome Back</h1>
+          <p>Sign in to your CRM account</p>
         </div>
         <form (ngSubmit)="login()" class="auth-form">
           <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Email</mat-label>
+            <mat-label>Email Address</mat-label>
             <input matInput type="email" [(ngModel)]="email" name="email" required>
             <mat-icon matPrefix>email</mat-icon>
           </mat-form-field>
@@ -39,48 +38,41 @@ import { NotificationService } from '@core/services/notification.service';
             </button>
           </mat-form-field>
           <div class="form-options">
-            <mat-checkbox [(ngModel)]="rememberMe" name="rememberMe">Remember me</mat-checkbox>
-            <a href="javascript:void(0)" class="forgot-link">Forgot password?</a>
+            <mat-checkbox [(ngModel)]="rememberMe" name="rememberMe" color="primary">Remember me</mat-checkbox>
           </div>
-          <button mat-raised-button color="primary" type="submit" class="full-width login-btn" [disabled]="loading">
+          <button mat-raised-button color="primary" type="submit" class="full-width login-btn" [disabled]="loading || !email || !password">
             <mat-spinner *ngIf="loading" diameter="20"></mat-spinner>
             <span *ngIf="!loading">Sign In</span>
           </button>
         </form>
-        <div class="auth-footer">
-          <p>Don't have an account? <a routerLink="/auth/register">Sign up</a></p>
-        </div>
+        <div class="auth-footer"><p>New to CRM Central? <a routerLink="/auth/register">Create a company account</a></p></div>
       </div>
     </div>
   `,
   styles: [`
-    .auth-container { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); }
-    .auth-card { background: white; border-radius: 16px; padding: 40px; width: 100%; max-width: 440px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
-    .auth-header { text-align: center; margin-bottom: 32px;
-      .auth-logo { font-size: 48px; width: 48px; height: 48px; color: #1976d2; }
-      h1 { font-size: 24px; font-weight: 700; margin-top: 8px; }
-      p { color: #666; margin-top: 4px; }
-    }
-    .full-width { width: 100%; }
-    .form-options { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;
-      .forgot-link { color: #1976d2; text-decoration: none; font-size: 14px; }
-    }
-    .login-btn { height: 48px; font-size: 16px; border-radius: 8px; }
-    .auth-footer { text-align: center; margin-top: 24px; a { color: #1976d2; text-decoration: none; font-weight: 600; } }
+    .auth-container{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#0f172a 0%,#1e293b 50%,#0f3460 100%)}
+    .auth-card{background:white;border-radius:16px;padding:40px;width:100%;max-width:420px;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+    .auth-header{text-align:center;margin-bottom:28px}
+    .auth-logo{font-size:48px;width:48px;height:48px;color:#3b82f6}
+    .auth-header h1{font-size:22px;font-weight:700;margin-top:8px}
+    .auth-header p{color:#64748b;margin-top:4px;font-size:14px}
+    .full-width{width:100%}
+    .form-options{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+    .login-btn{height:48px;font-size:15px;border-radius:10px}
+    .auth-footer{text-align:center;margin-top:20px;font-size:14px}
+    .auth-footer a{color:#3b82f6;text-decoration:none;font-weight:600}
   `]
 })
 export class LoginComponent {
   email = ''; password = ''; rememberMe = false;
   hidePassword = true; loading = false;
-
   constructor(private authService: AuthService, private router: Router, private notify: NotificationService) {}
-
   login() {
-    if (!this.email || !this.password) { this.notify.error('Please fill in all fields'); return; }
+    if (!this.email || !this.password) { this.notify.error('Please enter your email and password'); return; }
     this.loading = true;
     this.authService.login({ email: this.email, password: this.password, rememberMe: this.rememberMe }).subscribe({
-      next: (res) => { this.loading = false; if (res.success) { this.notify.success('Welcome back!'); this.router.navigate(['/dashboard']); } },
-      error: (err) => { this.loading = false; this.notify.error(err.error?.message || 'Login failed'); }
+      next: (res) => { this.loading = false; if (res.success) { this.notify.success('Welcome back, ' + res.data.user.firstName + '!'); this.router.navigate(['/dashboard']); } },
+      error: (err) => { this.loading = false; this.notify.error(err.error?.message || 'Invalid email or password'); }
     });
   }
 }
