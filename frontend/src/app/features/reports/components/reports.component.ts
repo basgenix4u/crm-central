@@ -36,7 +36,6 @@ import { DashboardData } from '@core/models';
             <div style="margin-top:16px;" *ngFor="let entry of getIndustryEntries()">
               <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>{{ entry[0] }}</span><span>{{ entry[1] }}</span></div>
               <div style="height:8px;background:#f0f0f0;border-radius:4px;overflow:hidden;margin-bottom:12px;"><div style="height:100%;background:#9c27b0;border-radius:4px;" [style.width.%]="getIndustryBarWidth(entry[1])"></div></div>
-  exportReport() { window.print(); }
             </div>
           </div>
         </mat-tab>
