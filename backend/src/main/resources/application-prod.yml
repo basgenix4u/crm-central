@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}?sslmode=prefer
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     hikari:
@@ -16,23 +16,8 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
-  # Redis excluded at app level - only activates via RedisConfig when host is set
-  data:
-
   cache:
-    type: ${CACHE_TYPE:simple}
-
-  mail:
-    host: ${MAIL_HOST:smtp.gmail.com}
-    port: ${MAIL_PORT:587}
-    username: ${MAIL_USERNAME:}
-    password: ${MAIL_PASSWORD:}
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
+    type: simple
 
 server:
   port: ${PORT:8080}
@@ -40,7 +25,7 @@ server:
     context-path: /api
 
 jwt:
-  secret: ${JWT_SECRET:dGhpcyBpcyBhIHZlcnkgbG9uZyBzZWNyZXQga2V5IGZvciBjcm0gY2VudHJhbCBhcHBsaWNhdGlvbiB0aGF0IG5lZWRzIHRvIGJlIGF0IGxlYXN0IDI1NiBiaXRz}
+  secret: ${JWT_SECRET:default-secret-key-that-should-be-changed-in-production-at-least-256-bits}
   access-token-expiration: 3600000
   refresh-token-expiration: 604800000
 
@@ -51,10 +36,9 @@ app:
   max-page-size: 100
 
 file:
-  upload-dir: ${FILE_UPLOAD_DIR:/tmp/uploads}
+  upload-dir: /tmp/uploads
 
 logging:
   level:
+    root: WARN
     com.crmcentral: INFO
-    org.hibernate.SQL: WARN
-    org.springframework.boot.autoconfigure: WARN
