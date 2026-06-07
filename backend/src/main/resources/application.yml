@@ -32,4 +32,4 @@ spring:
   data:
 
   cache:
-    type: redis
+    type: simple
