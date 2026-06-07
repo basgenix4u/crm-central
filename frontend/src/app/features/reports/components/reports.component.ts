@@ -12,7 +12,7 @@ import { DashboardData } from '@core/models';
   imports: [CommonModule, MatCardModule, MatIconModule, MatTabsModule, MatButtonModule],
   template: `
     <div class="page-container">
-      <div class="page-header"><h1>Reports & Analytics</h1><button mat-raised-button><mat-icon>download</mat-icon> Export</button></div>
+      <div class="page-header"><h1>Reports & Analytics</h1><button mat-raised-button (click)="exportReport()"><mat-icon>download</mat-icon> Export</button></div>
       <mat-tab-group>
         <mat-tab label="Sales Reports">
           <div class="stats-grid" style="margin-top:24px;">
@@ -36,6 +36,7 @@ import { DashboardData } from '@core/models';
             <div style="margin-top:16px;" *ngFor="let entry of getIndustryEntries()">
               <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>{{ entry[0] }}</span><span>{{ entry[1] }}</span></div>
               <div style="height:8px;background:#f0f0f0;border-radius:4px;overflow:hidden;margin-bottom:12px;"><div style="height:100%;background:#9c27b0;border-radius:4px;" [style.width.%]="getIndustryBarWidth(entry[1])"></div></div>
+  exportReport() { window.print(); }
             </div>
           </div>
         </mat-tab>
@@ -57,4 +58,5 @@ export class ReportsComponent implements OnInit {
   getBarWidth(amount: number): number { return (amount / this.maxPipeline) * 100; }
   getIndustryEntries(): [string, number][] { return this.data?.customersByIndustry ? Object.entries(this.data.customersByIndustry) : []; }
   getIndustryBarWidth(val: number): number { const max = Math.max(...Object.values(this.data?.customersByIndustry || {}), 1); return (val / max) * 100; }
+  exportReport() { window.print(); }
 }
