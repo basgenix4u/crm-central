@@ -187,12 +187,11 @@ ${Object.entries(d.pipelineMetrics||{}).map(([s,v])=>`<tr><td>${s.replace('_',' 
 </div>
 </body></html>`;
 
-    const blob = new Blob([html], { type: 'text/html' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'CRM-Report-' + new Date().toISOString().slice(0,10) + '.html';
-    a.click();
-    URL.revokeObjectURL(url);
+    const win = window.open('', '_blank');
+    if (win) {
+      win.document.write(html);
+      win.document.close();
+      setTimeout(() => win.print(), 600);
+    }
   }
 }
