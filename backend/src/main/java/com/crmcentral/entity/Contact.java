@@ -40,6 +40,7 @@ public class Contact extends BaseEntity {
     private String notes;
 
     private String category;
+    @Column(name = "is_primary")
     private boolean primary;
 
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
