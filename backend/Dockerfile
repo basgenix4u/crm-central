@@ -9,4 +9,4 @@ WORKDIR /app
 COPY --from=builder /build/target/app.jar app.jar
 RUN mkdir -p /tmp/uploads
 EXPOSE 8080
-CMD ["java", "-Xmx180m", "-Xms80m", "-XX:+UseSerialGC", "-XX:MaxMetaspaceSize=64m", "-XX:ReservedCodeCacheSize=24m", "-XX:-TieredCompilation", "-Dspring.jmx.enabled=false", "-jar", "app.jar"]
+CMD ["java", "-Xmx180m", "-Xms80m", "-XX:+UseSerialGC", "-XX:MaxMetaspaceSize=64m", "-XX:-TieredCompilation", "-Dspring.jmx.enabled=false", "-Dlogging.level.root=WARN", "-Dlogging.level.org.springframework.boot=INFO", "-Dlogging.level.com.crmcentral=INFO", "-jar", "app.jar"]
