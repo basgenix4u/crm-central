@@ -6,9 +6,7 @@ RUN mvn package -DskipTests -q && mv target/crm-central-*.jar target/app.jar
 
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
-RUN addgroup -S app && adduser -S app -G app
 COPY --from=builder /build/target/app.jar app.jar
-RUN mkdir -p /tmp/uploads && chown app:app /tmp/uploads
-USER app:app
+RUN mkdir -p /tmp/uploads
 EXPOSE 8080
-CMD ["java", "-Xmx200m", "-Xms100m", "-XX:+UseSerialGC", "-XX:MaxMetaspaceSize=80m", "-XX:ReservedCodeCacheSize=32m", "-XX:-TieredCompilation", "-Djava.security.egd=file:/dev/./urandom", "-jar", "app.jar"]
+CMD ["java", "-Xmx180m", "-Xms80m", "-XX:+UseSerialGC", "-XX:MaxMetaspaceSize=64m", "-XX:ReservedCodeCacheSize=24m", "-XX:-TieredCompilation", "-Dspring.jmx.enabled=false", "-jar", "app.jar"]
