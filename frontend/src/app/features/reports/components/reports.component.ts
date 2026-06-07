@@ -86,88 +86,112 @@ export class ReportsComponent implements OnInit {
     if (!this.data) return;
     const d = this.data;
     const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    const user = JSON.parse(localStorage.getItem('crm_user') || '{}');
+    const companyName = 'CRM Central';
 
-    const html = `
-      <html><head><title>CRM Central Report</title>
-      <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-        *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
-        body{padding:40px;color:#1e293b}
-        .header{display:flex;justify-content:space-between;align-items:center;padding-bottom:20px;border-bottom:3px solid #3b82f6;margin-bottom:30px}
-        .logo{display:flex;align-items:center;gap:12px}
-        .logo-icon{width:40px;height:40px;background:linear-gradient(135deg,#3b82f6,#1d4ed8);border-radius:10px;display:flex;align-items:center;justify-content:center;color:white;font-size:20px;font-weight:bold}
-        .logo-text{font-size:22px;font-weight:700;color:#0f172a}
-        .logo-sub{font-size:11px;color:#64748b}
-        .date{text-align:right;font-size:12px;color:#64748b}
-        .date strong{display:block;font-size:16px;color:#0f172a}
-        h2{font-size:20px;font-weight:700;color:#0f172a;margin:24px 0 12px}
-        .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
-        .stat-box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:16px;text-align:center}
-        .stat-box .value{font-size:28px;font-weight:700;color:#3b82f6}
-        .stat-box .label{font-size:12px;color:#64748b;margin-top:4px}
-        table{width:100%;border-collapse:collapse;margin:12px 0}
-        th{background:#f1f5f9;padding:10px 12px;text-align:left;font-size:12px;font-weight:600;color:#475569;border-bottom:2px solid #e2e8f0}
-        td{padding:10px 12px;border-bottom:1px solid #f1f5f9;font-size:13px}
-        .footer{margin-top:40px;padding-top:16px;border-top:1px solid #e2e8f0;text-align:center;font-size:11px;color:#94a3b8}
-        @media print{body{padding:20px}.footer{position:fixed;bottom:20px;left:0;right:0}}
-      </style></head><body>
-      <div class="header">
-        <div class="logo">
-          <div class="logo-icon">C</div>
-          <div><div class="logo-text">CRM Central</div><div class="logo-sub">Business Intelligence Report</div></div>
-        </div>
-        <div class="date"><strong>Business Report</strong>${today}</div>
-      </div>
+    const svgLogo = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="40" height="40"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#1d4ed8"/></linearGradient></defs><rect width="32" height="32" rx="8" fill="url(#g)"/><circle cx="16" cy="16" r="4" fill="white"/><circle cx="16" cy="7" r="2.5" fill="white" opacity=".9"/><circle cx="16" cy="25" r="2.5" fill="white" opacity=".9"/><circle cx="7" cy="12" r="2.5" fill="white" opacity=".9"/><circle cx="25" cy="12" r="2.5" fill="white" opacity=".9"/><circle cx="7" cy="20" r="2.5" fill="white" opacity=".9"/><circle cx="25" cy="20" r="2.5" fill="white" opacity=".9"/></svg>`;
 
-      <h2>Sales Overview</h2>
-      <div class="stats">
-        <div class="stat-box"><div class="value">$${(d.totalRevenue || 0).toLocaleString()}</div><div class="label">Total Revenue</div></div>
-        <div class="stat-box"><div class="value">${d.totalOpportunities}</div><div class="label">Total Deals</div></div>
-        <div class="stat-box"><div class="value">$${(d.avgDealSize || 0).toLocaleString()}</div><div class="label">Avg Deal Size</div></div>
-      </div>
+    const html = `<!DOCTYPE html><html><head><title>Business Report - ${companyName}</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@page{size:A4;margin:0}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',system-ui,sans-serif}
+body{width:210mm;min-height:297mm;margin:0 auto;background:white;color:#1e293b;font-size:11px}
+.page{padding:24mm 20mm 30mm;position:relative;min-height:297mm}
+.header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;padding-bottom:16px;border-bottom:3px solid #3b82f6}
+.logo-area{display:flex;align-items:center;gap:12px}
+.logo-area h1{font-size:20px;font-weight:800;color:#0f172a;letter-spacing:-0.5px}
+.logo-area .subtitle{font-size:9px;color:#3b82f6;font-weight:600;text-transform:uppercase;letter-spacing:1.5px}
+.report-meta{text-align:right}
+.report-meta .report-title{font-size:16px;font-weight:700;color:#0f172a}
+.report-meta .report-date{font-size:10px;color:#64748b;margin-top:2px}
+.report-meta .report-by{font-size:9px;color:#94a3b8;margin-top:2px}
+.section{margin-bottom:20px}
+.section h2{font-size:14px;font-weight:700;color:#0f172a;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;gap:6px}
+.section h2::before{content:'';width:4px;height:16px;background:#3b82f6;border-radius:2px}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.stat{background:linear-gradient(135deg,#f8fafc,#f1f5f9);border:1px solid #e2e8f0;border-radius:8px;padding:14px;text-align:center}
+.stat .val{font-size:22px;font-weight:800;color:#3b82f6}
+.stat .lbl{font-size:9px;color:#64748b;margin-top:2px;text-transform:uppercase;letter-spacing:0.5px}
+.stat.green .val{color:#16a34a}
+.stat.purple .val{color:#9333ea}
+.stat.orange .val{color:#ea580c}
+table{width:100%;border-collapse:collapse;margin:8px 0}
+th{background:#f1f5f9;padding:8px 10px;text-align:left;font-size:10px;font-weight:600;color:#475569;border-bottom:2px solid #e2e8f0}
+td{padding:8px 10px;border-bottom:1px solid #f1f5f9;font-size:10px}
+tr:nth-child(even) td{background:#fafbfc}
+.bar-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.bar-label{width:80px;font-size:10px;color:#475569}
+.bar-track{flex:1;height:6px;background:#e2e8f0;border-radius:3px;overflow:hidden}
+.bar-fill{height:100%;border-radius:3px}
+.bar-val{width:40px;text-align:right;font-size:10px;font-weight:600}
+.footer{position:fixed;bottom:0;left:0;right:0;padding:10mm 20mm;background:linear-gradient(135deg,#0f172a,#1e293b);color:white;display:flex;justify-content:space-between;align-items:center}
+.footer-left{font-size:9px;opacity:0.8}
+.footer-center{font-size:8px;opacity:0.5;text-align:center}
+.footer-right{font-size:9px;opacity:0.8}
+.watermark{position:fixed;bottom:40mm;right:20mm;font-size:72px;color:rgba(59,130,246,0.03);font-weight:900;transform:rotate(-30deg)}
+</style></head><body>
+<div class="page">
+<div class="header">
+  <div class="logo-area">
+    ${svgLogo}
+    <div><h1>CRM Central</h1><div class="subtitle">Business Intelligence Report</div></div>
+  </div>
+  <div class="report-meta">
+    <div class="report-title">Performance Report</div>
+    <div class="report-date">${today}</div>
+    <div class="report-by">Prepared by ${user.firstName || ''} ${user.lastName || ''}</div>
+  </div>
+</div>
 
-      <h2>Customer Overview</h2>
-      <div class="stats">
-        <div class="stat-box"><div class="value">${d.totalCustomers}</div><div class="label">Customers</div></div>
-        <div class="stat-box"><div class="value">${d.totalLeads}</div><div class="label">Leads</div></div>
-        <div class="stat-box"><div class="value">${d.totalContacts}</div><div class="label">Contacts</div></div>
-      </div>
+<div class="section"><h2>Revenue & Sales</h2>
+<div class="stats-row">
+  <div class="stat"><div class="val">\$${(d.totalRevenue||0).toLocaleString()}</div><div class="lbl">Total Revenue</div></div>
+  <div class="stat green"><div class="val">${d.totalOpportunities}</div><div class="lbl">Active Deals</div></div>
+  <div class="stat orange"><div class="val">\$${Math.round(d.avgDealSize||0).toLocaleString()}</div><div class="lbl">Avg Deal Size</div></div>
+</div></div>
 
-      <h2>Support & Productivity</h2>
-      <div class="stats">
-        <div class="stat-box"><div class="value">${d.totalTickets}</div><div class="label">Total Tickets</div></div>
-        <div class="stat-box"><div class="value">${d.openTickets}</div><div class="label">Open Tickets</div></div>
-        <div class="stat-box"><div class="value">${d.totalTasks}</div><div class="label">Tasks</div></div>
-      </div>
+<div class="section"><h2>Pipeline Breakdown</h2>
+<table><tr><th>Stage</th><th>Deals</th><th>Total Value</th><th>Avg Value</th></tr>
+${Object.entries(d.pipelineMetrics||{}).map(([s,v])=>`<tr><td>${s.replace('_',' ')}</td><td>${(v as any).count||0}</td><td>\$${((v as any).amount||0).toLocaleString()}</td><td>\$${(v as any).count?Math.round((v as any).amount/(v as any).count).toLocaleString():'0'}</td></tr>`).join('')}
+</table></div>
 
-      <h2>Pipeline Breakdown</h2>
-      <table>
-        <tr><th>Stage</th><th>Deals</th><th>Value</th></tr>
-        ${Object.entries(d.pipelineMetrics || {}).map(([stage, data]: [string, any]) =>
-          `<tr><td>${stage}</td><td>${data.count || 0}</td><td>$${(data.amount || 0).toLocaleString()}</td></tr>`
-        ).join('')}
-      </table>
+<div class="section"><h2>Customer & Contacts</h2>
+<div class="stats-row">
+  <div class="stat purple"><div class="val">${d.totalCustomers}</div><div class="lbl">Customers</div></div>
+  <div class="stat"><div class="val">${d.totalContacts}</div><div class="lbl">Contacts</div></div>
+  <div class="stat green"><div class="val">${d.totalLeads}</div><div class="lbl">Leads</div></div>
+</div></div>
 
-      <h2>Marketing</h2>
-      <div class="stats">
-        <div class="stat-box"><div class="value">${d.totalCampaigns}</div><div class="label">Active Campaigns</div></div>
-        <div class="stat-box"><div class="value">${d.totalActivities}</div><div class="label">Activities Logged</div></div>
-        <div class="stat-box"><div class="value">${d.completedTasks}</div><div class="label">Tasks Completed</div></div>
-      </div>
+<div class="section"><h2>Support & Operations</h2>
+<div class="stats-row">
+  <div class="stat orange"><div class="val">${d.totalTickets}</div><div class="lbl">Total Tickets</div></div>
+  <div class="stat"><div class="val">${d.openTickets}</div><div class="lbl">Open Tickets</div></div>
+  <div class="stat green"><div class="val">${d.completedTasks}/${d.totalTasks}</div><div class="lbl">Tasks Done</div></div>
+</div></div>
 
-      <div class="footer">
-        <p>Generated by CRM Central on ${today} &bull; Confidential Business Report</p>
-        <p>www.crmcentral.com</p>
-      </div>
-      </body></html>
-    `;
+<div class="section"><h2>Marketing</h2>
+<div class="stats-row">
+  <div class="stat"><div class="val">${d.totalCampaigns}</div><div class="lbl">Campaigns</div></div>
+  <div class="stat purple"><div class="val">${d.totalActivities}</div><div class="lbl">Activities</div></div>
+  <div class="stat"><div class="val">${d.totalContacts}</div><div class="lbl">Reach</div></div>
+</div></div>
 
-    // Create downloadable HTML report
+<div class="watermark">CRM</div>
+</div>
+
+<div class="footer">
+  <div class="footer-left">CRM Central &bull; Enterprise CRM Platform</div>
+  <div class="footer-center">CONFIDENTIAL &bull; ${today}</div>
+  <div class="footer-right">Page 1 of 1</div>
+</div>
+</body></html>`;
+
     const blob = new Blob([html], { type: 'text/html' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'CRM-Central-Report-' + new Date().toISOString().slice(0, 10) + '.html';
+    a.download = 'CRM-Report-' + new Date().toISOString().slice(0,10) + '.html';
     a.click();
     URL.revokeObjectURL(url);
   }
