@@ -4,16 +4,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration;
-import org.springframework.boot.autoconfigure.mail.MailSenderAutoConfiguration;
-import org.springframework.boot.autoconfigure.websocket.servlet.WebSocketServletAutoConfiguration;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication(exclude = {
     RedisAutoConfiguration.class,
-    RedisRepositoriesAutoConfiguration.class,
-    MailSenderAutoConfiguration.class,
-    WebSocketServletAutoConfiguration.class
+    RedisRepositoriesAutoConfiguration.class
 })
 @EnableJpaAuditing
 @EnableCaching
