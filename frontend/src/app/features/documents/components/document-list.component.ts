@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { MatTableModule } from '@angular/material/table';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatMenuModule } from '@angular/material/menu';
@@ -18,43 +17,69 @@ import { DocViewerComponent } from './doc-viewer.component';
 
 @Component({
   selector: 'app-document-list', standalone: true,
-  imports: [CommonModule, MatCardModule, MatIconModule, MatButtonModule, MatTableModule, MatProgressSpinnerModule, MatProgressBarModule, MatMenuModule, MatDialogModule],
+  imports: [CommonModule, MatCardModule, MatIconModule, MatButtonModule, MatProgressSpinnerModule, MatProgressBarModule, MatMenuModule, MatDialogModule],
   template: `
     <div class="page-container">
       <div class="page-header"><h1>Documents</h1>
         <button mat-raised-button color="primary" (click)="openUpload()"><mat-icon>cloud_upload</mat-icon> Upload</button>
       </div>
-      <div *ngIf="uploading" class="card" style="margin-bottom:16px;"><div style="display:flex;align-items:center;gap:12px;"><mat-spinner diameter="20"></mat-spinner><span>Uploading...</span></div><mat-progress-bar mode="indeterminate" style="margin-top:8px;"></mat-progress-bar></div>
-      <div class="card">
-        <div *ngIf="loading" style="text-align:center;padding:48px;"><mat-spinner diameter="40" style="margin:0 auto;"></mat-spinner></div>
-        <table mat-table [dataSource]="documents" class="data-table" *ngIf="!loading && documents.length > 0">
-          <ng-container matColumnDef="icon"><th mat-header-cell *matHeaderCellDef style="width:40px;"></th><td mat-cell *matCellDef="let r"><mat-icon [style.color]="getColor(r.type)">{{ getIcon(r.type) }}</mat-icon></td></ng-container>
-          <ng-container matColumnDef="name"><th mat-header-cell *matHeaderCellDef>Document</th><td mat-cell *matCellDef="let r"><a (click)="viewDoc(r);$event.stopPropagation()" style="color:#3b82f6;cursor:pointer;font-weight:600;">{{ r.originalName || r.name }}</a><br><small style="color:#64748b;">{{ r.description || '' }}</small></td></ng-container>
-          <ng-container matColumnDef="type"><th mat-header-cell *matHeaderCellDef>Type</th><td mat-cell *matCellDef="let r"><span class="status-badge">{{ r.type || 'FILE' }}</span></td></ng-container>
-          <ng-container matColumnDef="size"><th mat-header-cell *matHeaderCellDef>Size</th><td mat-cell *matCellDef="let r">{{ formatSize(r.fileSize) }}</td></ng-container>
-          <ng-container matColumnDef="by"><th mat-header-cell *matHeaderCellDef>By</th><td mat-cell *matCellDef="let r">{{ r.uploadedBy?.firstName }} {{ r.uploadedBy?.lastName }}</td></ng-container>
-          <ng-container matColumnDef="date"><th mat-header-cell *matHeaderCellDef>Date</th><td mat-cell *matCellDef="let r">{{ r.createdAt | date:'mediumDate' }}</td></ng-container>
-          <ng-container matColumnDef="actions"><th mat-header-cell *matHeaderCellDef></th><td mat-cell *matCellDef="let r">
-            <button mat-icon-button [matMenuTriggerFor]="m"><mat-icon>more_vert</mat-icon></button>
-            <mat-menu #m="matMenu">
-              <button mat-menu-item (click)="viewDoc(r)"><mat-icon>visibility</mat-icon> View</button>
-              <button mat-menu-item (click)="downloadDoc(r)"><mat-icon>download</mat-icon> Download</button>
-              <button mat-menu-item (click)="del(r.id)"><mat-icon>delete</mat-icon> Delete</button>
+      <div *ngIf="uploading" class="card" style="margin-bottom:12px;">
+        <div style="display:flex;align-items:center;gap:10px;"><mat-spinner diameter="18"></mat-spinner><span style="font-size:13px;">Uploading...</span></div>
+        <mat-progress-bar mode="indeterminate" style="margin-top:6px;"></mat-progress-bar>
+      </div>
+      <div class="card" style="padding:0;">
+        <div *ngIf="loading" style="text-align:center;padding:40px;"><mat-spinner diameter="36" style="margin:0 auto;"></mat-spinner></div>
+
+        <!-- Document list - card style for mobile friendliness -->
+        <div *ngIf="!loading && documents.length > 0">
+          <div *ngFor="let doc of documents" class="doc-row" (click)="viewDoc(doc)">
+            <mat-icon class="doc-icon" [style.color]="getColor(doc.type)">{{ getIcon(doc.type) }}</mat-icon>
+            <div class="doc-info">
+              <div class="doc-name">{{ doc.originalName || doc.name }}</div>
+              <div class="doc-meta">
+                <span class="doc-badge">{{ doc.type || 'FILE' }}</span>
+                <span>{{ formatSize(doc.fileSize) }}</span>
+                <span class="doc-date">{{ doc.createdAt | date:'shortDate' }}</span>
+              </div>
+            </div>
+            <button mat-icon-button [matMenuTriggerFor]="docMenu" (click)="$event.stopPropagation()">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #docMenu="matMenu">
+              <button mat-menu-item (click)="viewDoc(doc)"><mat-icon>visibility</mat-icon> View</button>
+              <button mat-menu-item (click)="downloadDoc(doc)"><mat-icon>download</mat-icon> Download</button>
+              <button mat-menu-item (click)="del(doc.id)"><mat-icon>delete</mat-icon> Delete</button>
             </mat-menu>
-          </td></ng-container>
-          <tr mat-header-row *matHeaderRowDef="cols"></tr>
-          <tr mat-row *matRowDef="let row; columns: cols;"></tr>
-        </table>
-        <div *ngIf="!loading && documents.length === 0" class="empty-state"><mat-icon class="empty-icon">folder_open</mat-icon><h3>No documents yet</h3><p>Upload contracts, proposals, invoices.</p>
-          <button mat-raised-button color="primary" (click)="openUpload()" style="margin-top:16px;"><mat-icon>cloud_upload</mat-icon> Upload</button>
+          </div>
+        </div>
+
+        <div *ngIf="!loading && documents.length === 0" class="empty-state">
+          <mat-icon class="empty-icon">folder_open</mat-icon><h3>No documents yet</h3>
+          <p>Upload contracts, proposals, invoices.</p>
+          <button mat-raised-button color="primary" (click)="openUpload()" style="margin-top:12px;"><mat-icon>cloud_upload</mat-icon> Upload</button>
         </div>
       </div>
     </div>
   `,
-  styles: [`.data-table{width:100%}tr.mat-mdc-row:hover{background:#f8fafc}`]
+  styles: [`
+    .doc-row{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid #f1f5f9;cursor:pointer;transition:background .15s}
+    .doc-row:hover{background:#f8fafc}
+    .doc-row:last-child{border-bottom:none}
+    .doc-icon{font-size:24px;width:24px;height:24px;flex-shrink:0}
+    .doc-info{flex:1;min-width:0}
+    .doc-name{font-size:13px;font-weight:600;color:#0f172a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .doc-meta{display:flex;align-items:center;gap:8px;margin-top:3px;font-size:11px;color:#64748b;flex-wrap:wrap}
+    .doc-badge{background:#f1f5f9;color:#475569;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:600;text-transform:uppercase}
+    .doc-date{color:#94a3b8}
+    @media(max-width:640px){
+      .doc-row{padding:10px 12px;gap:10px}
+      .doc-name{font-size:12px}
+      .doc-meta{font-size:10px;gap:6px}
+    }
+  `]
 })
 export class DocumentListComponent implements OnInit {
-  documents: any[] = []; cols = ['icon','name','type','size','by','date','actions'];
+  documents: any[] = [];
   loading = true; uploading = false;
   constructor(private api: ApiService, private http: HttpClient, private notify: NotificationService, private auth: AuthService, private dialog: MatDialog) {}
   ngOnInit() { this.load(); }
@@ -83,7 +108,7 @@ export class DocumentListComponent implements OnInit {
     this.http.get(url, { headers, responseType: 'blob' }).subscribe({
       next: (blob) => {
         this.dialog.open(DocViewerComponent, {
-          width: '90vw', maxWidth: '1000px', height: '85vh',
+          width: '95vw', maxWidth: '1000px', maxHeight: '90vh',
           data: { name: doc.originalName || doc.name, contentType: doc.contentType, size: this.formatSize(doc.fileSize), blob }
         });
       },
@@ -102,6 +127,6 @@ export class DocumentListComponent implements OnInit {
 
   del(id: string) { if (confirm('Delete?')) this.api.delete('documents/' + id).subscribe({ next: () => { this.notify.success('Deleted'); this.load(); }}); }
   getIcon(type: string): string { const m: any = { CONTRACT:'gavel', INVOICE:'receipt', PROPOSAL:'description', REPORT:'assessment', IMAGE:'image' }; return m[type] || 'insert_drive_file'; }
-  getColor(type: string): string { const m: any = { CONTRACT:'#1565c0', INVOICE:'#2e7d32', PROPOSAL:'#e65100', REPORT:'#6a1b9a', IMAGE:'#00838f' }; return m[type] || '#757575'; }
+  getColor(type: string): string { const m: any = { CONTRACT:'#1565c0', INVOICE:'#2e7d32', PROPOSAL:'#e65100', REPORT:'#6a1b9a', IMAGE:'#00838f' }; return m[type] || '#64748b'; }
   formatSize(bytes: number): string { if (!bytes) return '0 B'; const k = 1024; const s = ['B','KB','MB','GB']; const i = Math.floor(Math.log(bytes)/Math.log(k)); return parseFloat((bytes/Math.pow(k,i)).toFixed(1))+' '+s[i]; }
 }
