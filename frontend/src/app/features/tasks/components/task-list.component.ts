@@ -43,6 +43,6 @@ export class TaskListComponent implements OnInit {
   ngOnInit(){this.load();}
   load(){this.loading=true;this.api.getPage('tasks',this.page,20).subscribe({next:r=>{this.items=r.data?.content||[];this.total=r.data?.totalElements||0;this.loading=false;},error:()=>this.loading=false});}
   onPage(e:PageEvent){this.page=e.pageIndex;this.load();}
-  openForm(data?:any){const ref=this.dialog.open(TaskFormComponent,{width:'600px',data:data||null});ref.afterClosed().subscribe(r=>{if(r){(data?.id?this.api.put('tasks/'+data.id,r):this.api.post('tasks',r)).subscribe({next:()=>{this.notify.success(data?.id?'Updated':'Created');this.load();},error:()=>this.notify.error('Failed')});}});}
+  openForm(data?:any){const ref=this.dialog.open(TaskFormComponent,{width:'95vw',maxWidth:'600px',data:data||null});ref.afterClosed().subscribe(r=>{if(r){(data?.id?this.api.put('tasks/'+data.id,r):this.api.post('tasks',r)).subscribe({next:()=>{this.notify.success(data?.id?'Updated':'Created');this.load();},error:()=>this.notify.error('Failed')});}});}
   del(id:string){if(confirm('Delete?'))this.api.delete('tasks/'+id).subscribe({next:()=>{this.notify.success('Deleted');this.load();}});}
 }

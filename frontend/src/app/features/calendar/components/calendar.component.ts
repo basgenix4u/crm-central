@@ -85,7 +85,7 @@ export class CalendarViewComponent implements OnInit {
   }
 
   newEvent() {
-    const ref = this.dialog.open(EventFormComponent, { width: '600px', data: null });
+    const ref = this.dialog.open(EventFormComponent, { width: '95vw', maxWidth: '600px', data: null });
     ref.afterClosed().subscribe(r => {
       if (r) {
         this.api.post('calendar', r).subscribe({

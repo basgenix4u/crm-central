@@ -42,6 +42,6 @@ export class ActivityListComponent implements OnInit {
   ngOnInit(){this.load();}
   load(){this.loading=true;this.api.getPage('activities',this.page,20).subscribe({next:r=>{this.items=r.data?.content||[];this.total=r.data?.totalElements||0;this.loading=false;},error:()=>this.loading=false});}
   onPage(e:PageEvent){this.page=e.pageIndex;this.load();}
-  openForm(data?:any){const ref=this.dialog.open(ActivityFormComponent,{width:'600px',data:data||null});ref.afterClosed().subscribe(r=>{if(r){(data?.id?this.api.put('activities/'+data.id,r):this.api.post('activities',r)).subscribe({next:()=>{this.notify.success('Saved');this.load();},error:()=>this.notify.error('Failed')});}});}
+  openForm(data?:any){const ref=this.dialog.open(ActivityFormComponent,{width:'95vw',maxWidth:'600px',data:data||null});ref.afterClosed().subscribe(r=>{if(r){(data?.id?this.api.put('activities/'+data.id,r):this.api.post('activities',r)).subscribe({next:()=>{this.notify.success('Saved');this.load();},error:()=>this.notify.error('Failed')});}});}
   del(id:string){if(confirm('Delete?'))this.api.delete('activities/'+id).subscribe({next:()=>{this.notify.success('Deleted');this.load();}});}
 }

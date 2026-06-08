@@ -104,7 +104,7 @@ import { NotificationService } from '@core/services/notification.service';
     .shape-2{width:300px;height:300px;bottom:-80px;left:-60px}
     .shape-3{width:200px;height:200px;top:50%;left:60%;background:rgba(96,165,250,.05)}
 
-    .auth-form-section{width:480px;min-width:400px;display:flex;align-items:center;justify-content:center;background:#fff;padding:48px}
+    .auth-form-section{width:480px;max-width:100%;display:flex;align-items:center;justify-content:center;background:#fff;padding:48px}
     .form-container{width:100%;max-width:380px}
     .form-header{margin-bottom:28px}
     .mobile-logo{display:none;align-items:center;gap:8px;margin-bottom:24px}

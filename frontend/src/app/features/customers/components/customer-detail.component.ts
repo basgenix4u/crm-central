@@ -111,7 +111,7 @@ export class CustomerDetailComponent implements OnInit {
   }
 
   editCustomer() {
-    const ref = this.dialog.open(CustomerFormComponent, { width: '700px', data: this.customer });
+    const ref = this.dialog.open(CustomerFormComponent, { width: '95vw', maxWidth: '700px', data: this.customer });
     ref.afterClosed().subscribe(r => {
       if (r) {
         this.api.put('customers/' + this.customer.id, r).subscribe({

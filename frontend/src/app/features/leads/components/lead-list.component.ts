@@ -58,7 +58,7 @@ export class LeadListComponent implements OnInit {
   search() { if(!this.sq){this.load();return;} this.api.getPage('leads/search',0,20,{q:this.sq}).subscribe({next:r=>{this.items=r.data?.content||[];}}); }
   onPage(e: PageEvent) { this.page=e.pageIndex; this.load(); }
   openForm(data?:any) {
-    const ref=this.dialog.open(LeadFormComponent,{width:'700px',data:data||null});
+    const ref=this.dialog.open(LeadFormComponent,{width:'95vw',maxWidth:'700px',data:data||null});
     ref.afterClosed().subscribe(r=>{if(r){const c=data?.id?this.api.put('leads/'+data.id,r):this.api.post('leads',r);c.subscribe({next:()=>{this.notify.success(data?.id?'Lead updated':'Lead created');this.load();},error:()=>this.notify.error('Failed')});}});
   }
   convert(id:string) { if(confirm('Convert this lead to a customer?')) { this.api.post('leads/'+id+'/convert',{}).subscribe({next:()=>{this.notify.success('Lead converted to customer!');this.load();},error:()=>this.notify.error('Conversion failed')}); }}

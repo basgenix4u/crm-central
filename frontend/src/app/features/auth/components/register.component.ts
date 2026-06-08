@@ -96,7 +96,7 @@ import { NotificationService } from '@core/services/notification.service';
     .shape-1{width:400px;height:400px;top:-100px;right:-100px}
     .shape-2{width:300px;height:300px;bottom:-80px;left:-60px}
 
-    .auth-form-section{width:500px;min-width:420px;display:flex;align-items:center;justify-content:center;background:#fff;padding:48px}
+    .auth-form-section{width:500px;max-width:100%;display:flex;align-items:center;justify-content:center;background:#fff;padding:48px}
     .form-container{width:100%;max-width:400px}
     .form-header{margin-bottom:24px}
     .mobile-logo{display:none;align-items:center;gap:8px;margin-bottom:20px}

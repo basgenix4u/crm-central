@@ -98,7 +98,7 @@ export class AdminPanelComponent implements OnInit {
   loadAudit() { this.api.getPage('audit-logs', 0, 100).subscribe({ next: r => this.auditLogs = r.data?.content || [], error: () => {} }); }
   
   addUser() {
-    const ref = this.dialog.open(UserFormComponent, { width: '600px', data: null });
+    const ref = this.dialog.open(UserFormComponent, { width: '95vw', maxWidth: '600px', data: null });
     ref.afterClosed().subscribe(r => {
       if (r) {
         this.api.post('admin/users', r).subscribe({

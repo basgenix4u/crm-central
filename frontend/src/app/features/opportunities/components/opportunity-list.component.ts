@@ -50,7 +50,7 @@ export class OpportunityListComponent implements OnInit {
   load(){this.loading=true;this.api.getPage('opportunities',this.page,20).subscribe({next:r=>{this.items=r.data?.content||[];this.total=r.data?.totalElements||0;this.loading=false;},error:()=>this.loading=false});}
   onPage(e:PageEvent){this.page=e.pageIndex;this.load();}
   openForm(data?:any){
-    const ref=this.dialog.open(OpportunityFormComponent,{width:'700px',data:data||null});
+    const ref=this.dialog.open(OpportunityFormComponent,{width:'95vw',maxWidth:'700px',data:data||null});
     ref.afterClosed().subscribe(r=>{if(r){const c=data?.id?this.api.put('opportunities/'+data.id,r):this.api.post('opportunities',r);c.subscribe({next:()=>{this.notify.success(data?.id?'Updated':'Created');this.load();},error:()=>this.notify.error('Failed')});}});
   }
   del(id:string){if(confirm('Delete?'))this.api.delete('opportunities/'+id).subscribe({next:()=>{this.notify.success('Deleted');this.load();}});}

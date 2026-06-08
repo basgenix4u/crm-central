@@ -61,7 +61,7 @@ export class DocumentListComponent implements OnInit {
   load() { this.loading = true; this.api.getPage('documents', 0, 100).subscribe({ next: r => { this.documents = r.data?.content || []; this.loading = false; }, error: () => { this.documents = []; this.loading = false; }}); }
 
   openUpload() {
-    const ref = this.dialog.open(UploadDialogComponent, { width: '500px', data: null });
+    const ref = this.dialog.open(UploadDialogComponent, { width: '95vw', maxWidth: '500px', data: null });
     ref.afterClosed().subscribe(result => {
       if (result?.file) {
         this.uploading = true;

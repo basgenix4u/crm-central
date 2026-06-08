@@ -63,7 +63,7 @@ export class CustomerListComponent implements OnInit {
   search() { if (!this.searchQuery) { this.load(); return; } this.api.getPage('customers/search', 0, 20, { q: this.searchQuery }).subscribe({ next: r => { this.items = r.data?.content||[]; this.total = r.data?.totalElements||0; }}); }
   onPage(e: PageEvent) { this.page = e.pageIndex; this.load(); }
   openForm(data?: any) {
-    const ref = this.dialog.open(CustomerFormComponent, { width: '700px', data: data || null });
+    const ref = this.dialog.open(CustomerFormComponent, { width: '95vw', maxWidth: '700px', data: data || null });
     ref.afterClosed().subscribe(result => {
       if (result) {
         const call = data?.id ? this.api.put('customers/' + data.id, result) : this.api.post('customers', result);

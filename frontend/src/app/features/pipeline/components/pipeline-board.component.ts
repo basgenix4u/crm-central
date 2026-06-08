@@ -49,16 +49,24 @@ import { OpportunityFormComponent } from '../../../features/opportunities/compon
     </div>
   `,
   styles: [`
-    .pipeline-board{display:flex;gap:16px;overflow-x:auto;padding-bottom:16px}
-    .pipeline-column{min-width:260px;background:#f8f9fa;border-radius:12px;padding:16px;flex-shrink:0}
-    .column-header{font-weight:600;font-size:14px;margin-bottom:12px;display:flex;justify-content:space-between}
-    .count{background:#1976d2;color:white;border-radius:12px;padding:2px 10px;font-size:12px}
-    .pipeline-card{background:white;border-radius:8px;padding:14px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,.1);cursor:grab}
-    .deal-name{font-weight:600;font-size:14px}
-    .deal-amount{font-size:18px;font-weight:700;color:#1976d2;margin-top:8px}
-    .cdk-drag-preview{box-shadow:0 4px 20px rgba(0,0,0,.2);border-radius:8px}
+    .pipeline-board{display:flex;gap:12px;overflow-x:auto;padding-bottom:12px;-webkit-overflow-scrolling:touch}
+    .pipeline-column{min-width:240px;background:#f8fafc;border-radius:12px;padding:14px;flex-shrink:0;border:1px solid #e2e8f0}
+    .column-header{font-weight:600;font-size:13px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+    .count{background:#3b82f6;color:white;border-radius:12px;padding:2px 8px;font-size:11px}
+    .pipeline-card{background:white;border-radius:10px;padding:12px;margin-bottom:8px;box-shadow:0 1px 3px rgba(0,0,0,.06);border:1px solid #e2e8f0;cursor:grab}
+    .deal-name{font-weight:600;font-size:13px}
+    .deal-amount{font-size:16px;font-weight:700;color:#3b82f6;margin-top:6px}
+    .cdk-drag-preview{box-shadow:0 4px 20px rgba(0,0,0,.2);border-radius:10px}
     .cdk-drag-placeholder{opacity:.3}
     .cdk-drop-list-dragging .pipeline-card:not(.cdk-drag-placeholder){transition:transform 250ms}
+
+    @media(max-width:640px){
+      .pipeline-board{flex-direction:column;overflow-x:visible}
+      .pipeline-column{min-width:unset;width:100%}
+      .pipeline-card{padding:10px}
+      .deal-name{font-size:12px}
+      .deal-amount{font-size:14px}
+    }
   `]
 })
 export class PipelineBoardComponent implements OnInit {
@@ -105,14 +113,14 @@ export class PipelineBoardComponent implements OnInit {
   }
 
   newOpp() {
-    const ref = this.dialog.open(OpportunityFormComponent, { width: '700px', data: null });
+    const ref = this.dialog.open(OpportunityFormComponent, { width: '95vw', maxWidth: '700px', data: null });
     ref.afterClosed().subscribe(r => {
       if (r) { this.api.post('opportunities', r).subscribe({ next: () => { this.notify.success('Opportunity created'); this.load(); }, error: () => this.notify.error('Failed') }); }
     });
   }
 
   editOpp(opp: any) {
-    const ref = this.dialog.open(OpportunityFormComponent, { width: '700px', data: opp });
+    const ref = this.dialog.open(OpportunityFormComponent, { width: '95vw', maxWidth: '700px', data: opp });
     ref.afterClosed().subscribe(r => {
       if (r) { this.api.put('opportunities/' + opp.id, r).subscribe({ next: () => { this.notify.success('Updated'); this.load(); }, error: () => this.notify.error('Failed') }); }
     });

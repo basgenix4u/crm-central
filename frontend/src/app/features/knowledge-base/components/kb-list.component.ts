@@ -56,6 +56,6 @@ export class KBListComponent implements OnInit {
   ngOnInit(){this.load();}
   load(){this.loading=true;this.api.getPage('knowledge-base',0,50).subscribe({next:r=>{this.articles=r.data?.content||[];this.loading=false;},error:()=>this.loading=false});}
   search(){if(!this.sq){this.load();return;}this.api.getPage('knowledge-base/search',0,50,{q:this.sq}).subscribe({next:r=>this.articles=r.data?.content||[]});}
-  openForm(data?:any){const ref=this.dialog.open(KBFormComponent,{width:'700px',data:data||null});ref.afterClosed().subscribe(r=>{if(r){(data?.id?this.api.put('knowledge-base/'+data.id,r):this.api.post('knowledge-base',r)).subscribe({next:()=>{this.notify.success(data?.id?'Article updated':'Article created');this.load();},error:()=>this.notify.error('Failed')});}});}
+  openForm(data?:any){const ref=this.dialog.open(KBFormComponent,{width:'95vw',maxWidth:'700px',data:data||null});ref.afterClosed().subscribe(r=>{if(r){(data?.id?this.api.put('knowledge-base/'+data.id,r):this.api.post('knowledge-base',r)).subscribe({next:()=>{this.notify.success(data?.id?'Article updated':'Article created');this.load();},error:()=>this.notify.error('Failed')});}});}
   del(id:string){if(confirm('Delete this article?'))this.api.delete('knowledge-base/'+id).subscribe({next:()=>{this.notify.success('Deleted');this.load();}});}
 }

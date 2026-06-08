@@ -49,6 +49,6 @@ export class ContactListComponent implements OnInit {
   load(){this.loading=true;this.api.getPage('contacts',this.page,20).subscribe({next:r=>{this.items=r.data?.content||[];this.total=r.data?.totalElements||0;this.loading=false;},error:()=>this.loading=false});}
   search(){if(!this.sq){this.load();return;}this.api.getPage('contacts/search',0,20,{q:this.sq}).subscribe({next:r=>this.items=r.data?.content||[]});}
   onPage(e:PageEvent){this.page=e.pageIndex;this.load();}
-  openForm(data?:any){const ref=this.dialog.open(ContactFormComponent,{width:'600px',data:data||null});ref.afterClosed().subscribe(r=>{if(r){(data?.id?this.api.put('contacts/'+data.id,r):this.api.post('contacts',r)).subscribe({next:()=>{this.notify.success('Saved');this.load();},error:()=>this.notify.error('Failed')});}});}
+  openForm(data?:any){const ref=this.dialog.open(ContactFormComponent,{width:'95vw',maxWidth:'600px',data:data||null});ref.afterClosed().subscribe(r=>{if(r){(data?.id?this.api.put('contacts/'+data.id,r):this.api.post('contacts',r)).subscribe({next:()=>{this.notify.success('Saved');this.load();},error:()=>this.notify.error('Failed')});}});}
   del(id:string){if(confirm('Delete?'))this.api.delete('contacts/'+id).subscribe({next:()=>{this.notify.success('Deleted');this.load();}});}
 }
