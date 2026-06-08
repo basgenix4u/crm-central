@@ -106,8 +106,45 @@ import { AuthService } from '@core/services/auth.service';
         </nav>
       </div>
 
-      <!-- Mobile slide menu overlay -->
+      <!-- Mobile slide-out drawer -->
       <div class="mobile-overlay" *ngIf="mobileMenu" (click)="mobileMenu=false"></div>
+      <div class="mobile-drawer" [class.open]="mobileMenu">
+        <div class="drawer-header">
+          <mat-icon class="logo-icon">hub</mat-icon>
+          <span style="font-size:16px;font-weight:700;color:#0f172a;">CRM Central</span>
+          <button mat-icon-button (click)="mobileMenu=false" style="margin-left:auto;"><mat-icon>close</mat-icon></button>
+        </div>
+        <div class="drawer-user" *ngIf="user">
+          <div class="avatar" style="width:36px;height:36px;font-size:14px;">{{ initials }}</div>
+          <div><strong>{{ user.firstName }} {{ user.lastName }}</strong><br><small style="color:#64748b;">{{ formatRole(user.role) }}</small></div>
+        </div>
+        <nav class="drawer-nav">
+          <a routerLink="/dashboard" routerLinkActive="on" (click)="mobileMenu=false"><mat-icon>dashboard</mat-icon>Dashboard</a>
+          <a routerLink="/customers" routerLinkActive="on" (click)="mobileMenu=false"><mat-icon>people</mat-icon>Customers</a>
+          <a routerLink="/leads" routerLinkActive="on" (click)="mobileMenu=false"><mat-icon>person_add</mat-icon>Leads</a>
+          <a routerLink="/opportunities" routerLinkActive="on" (click)="mobileMenu=false"><mat-icon>trending_up</mat-icon>Deals</a>
+          <a routerLink="/pipeline" routerLinkActive="on" (click)="mobileMenu=false"><mat-icon>view_kanban</mat-icon>Pipeline</a>
+          <a routerLink="/contacts" routerLinkActive="on" (click)="mobileMenu=false"><mat-icon>contacts</mat-icon>Contacts</a>
+          <div class="drawer-divider"></div>
+          <a routerLink="/activities" routerLinkActive="on" (click)="mobileMenu=false"><mat-icon>event_note</mat-icon>Activities</a>
+          <a routerLink="/tasks" routerLinkActive="on" (click)="mobileMenu=false"><mat-icon>task_alt</mat-icon>Tasks</a>
+          <a routerLink="/calendar" routerLinkActive="on" (click)="mobileMenu=false"><mat-icon>calendar_today</mat-icon>Calendar</a>
+          <a routerLink="/emails" routerLinkActive="on" (click)="mobileMenu=false"><mat-icon>email</mat-icon>Email</a>
+          <a routerLink="/documents" routerLinkActive="on" (click)="mobileMenu=false"><mat-icon>folder</mat-icon>Documents</a>
+          <div class="drawer-divider"></div>
+          <a routerLink="/tickets" routerLinkActive="on" (click)="mobileMenu=false"><mat-icon>confirmation_number</mat-icon>Tickets</a>
+          <a routerLink="/knowledge-base" routerLinkActive="on" (click)="mobileMenu=false"><mat-icon>menu_book</mat-icon>Help Center</a>
+          <a routerLink="/campaigns" routerLinkActive="on" (click)="mobileMenu=false"><mat-icon>campaign</mat-icon>Campaigns</a>
+          <a routerLink="/reports" routerLinkActive="on" (click)="mobileMenu=false"><mat-icon>assessment</mat-icon>Reports</a>
+          <a routerLink="/notifications" routerLinkActive="on" (click)="mobileMenu=false"><mat-icon>notifications</mat-icon>Notifications</a>
+          <div class="drawer-divider"></div>
+          <a routerLink="/settings" routerLinkActive="on" (click)="mobileMenu=false"><mat-icon>settings</mat-icon>Settings</a>
+          <a routerLink="/admin" routerLinkActive="on" (click)="mobileMenu=false" *ngIf="isAdmin"><mat-icon>admin_panel_settings</mat-icon>Admin</a>
+        </nav>
+        <div class="drawer-footer">
+          <a (click)="authService.logout();mobileMenu=false" style="color:#ef4444;"><mat-icon>logout</mat-icon>Sign Out</a>
+        </div>
+      </div>
     </div>
   `,
   styles: [`
@@ -187,8 +224,21 @@ import { AuthService } from '@core/services/auth.service';
       .mobile-nav a.on{color:#3b82f6}
       .mobile-nav a mat-icon{font-size:20px;width:20px;height:20px}
 
-      /* Mobile slide overlay */
-      .mobile-overlay{display:block;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:90}
+      /* Mobile slide overlay + drawer */
+      .mobile-overlay{display:block;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;backdrop-filter:blur(2px)}
+      .mobile-drawer{position:fixed;top:0;left:-280px;width:280px;height:100vh;background:white;z-index:210;transition:left .25s ease;display:flex;flex-direction:column;box-shadow:4px 0 20px rgba(0,0,0,.15);overflow-y:auto}
+      .mobile-drawer.open{left:0}
+      .drawer-header{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid #e2e8f0}
+      .drawer-user{display:flex;align-items:center;gap:10px;padding:12px 16px;background:#f8fafc;border-bottom:1px solid #e2e8f0}
+      .drawer-nav{flex:1;padding:8px}
+      .drawer-nav a{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:8px;color:#334155;text-decoration:none;font-size:14px;font-weight:500;transition:all .15s}
+      .drawer-nav a:hover{background:#f1f5f9}
+      .drawer-nav a.on{background:#eff6ff;color:#3b82f6}
+      .drawer-nav a mat-icon{font-size:20px;width:20px;height:20px;color:#64748b}
+      .drawer-nav a.on mat-icon{color:#3b82f6}
+      .drawer-divider{height:1px;background:#e2e8f0;margin:6px 12px}
+      .drawer-footer{padding:8px 8px 16px;border-top:1px solid #e2e8f0}
+      .drawer-footer a{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;text-decoration:none}
 
       .notif-btn{transform:scale(.9)}
       .avatar{width:28px;height:28px;font-size:11px}
