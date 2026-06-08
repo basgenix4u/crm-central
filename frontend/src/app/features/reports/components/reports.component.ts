@@ -76,7 +76,7 @@ export class ReportsComponent implements OnInit {
     const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
     const user = JSON.parse(localStorage.getItem('crm_user') || '{}');
 
-    const logo = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="48" height="48"><defs><linearGradient id="lg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#1d4ed8"/></linearGradient></defs><rect width="32" height="32" rx="8" fill="url(#lg1)"/><circle cx="16" cy="16" r="4" fill="white"/><circle cx="16" cy="7" r="2.5" fill="white" opacity=".9"/><circle cx="16" cy="25" r="2.5" fill="white" opacity=".9"/><circle cx="7" cy="12" r="2.5" fill="white" opacity=".9"/><circle cx="25" cy="12" r="2.5" fill="white" opacity=".9"/><circle cx="7" cy="20" r="2.5" fill="white" opacity=".9"/><circle cx="25" cy="20" r="2.5" fill="white" opacity=".9"/><line x1="16" y1="12" x2="16" y2="9.5" stroke="white" stroke-width="1.2" opacity=".7"/><line x1="16" y1="20" x2="16" y2="22.5" stroke="white" stroke-width="1.2" opacity=".7"/><line x1="12.5" y1="14" x2="9.2" y2="12.8" stroke="white" stroke-width="1.2" opacity=".7"/><line x1="19.5" y1="14" x2="22.8" y2="12.8" stroke="white" stroke-width="1.2" opacity=".7"/><line x1="12.5" y1="18" x2="9.2" y2="19.2" stroke="white" stroke-width="1.2" opacity=".7"/><line x1="19.5" y1="18" x2="22.8" y2="19.2" stroke="white" stroke-width="1.2" opacity=".7"/></svg>`;
+    const logo = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="56" height="56"><defs><linearGradient id="lg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#1d4ed8"/></linearGradient></defs><rect width="32" height="32" rx="8" fill="url(#lg1)"/><circle cx="16" cy="16" r="4" fill="white"/><circle cx="16" cy="7" r="2.5" fill="white" opacity=".9"/><circle cx="16" cy="25" r="2.5" fill="white" opacity=".9"/><circle cx="7" cy="12" r="2.5" fill="white" opacity=".9"/><circle cx="25" cy="12" r="2.5" fill="white" opacity=".9"/><circle cx="7" cy="20" r="2.5" fill="white" opacity=".9"/><circle cx="25" cy="20" r="2.5" fill="white" opacity=".9"/><line x1="16" y1="12" x2="16" y2="9.5" stroke="white" stroke-width="1.2" opacity=".7"/><line x1="16" y1="20" x2="16" y2="22.5" stroke="white" stroke-width="1.2" opacity=".7"/><line x1="12.5" y1="14" x2="9.2" y2="12.8" stroke="white" stroke-width="1.2" opacity=".7"/><line x1="19.5" y1="14" x2="22.8" y2="12.8" stroke="white" stroke-width="1.2" opacity=".7"/><line x1="12.5" y1="18" x2="9.2" y2="19.2" stroke="white" stroke-width="1.2" opacity=".7"/><line x1="19.5" y1="18" x2="22.8" y2="19.2" stroke="white" stroke-width="1.2" opacity=".7"/></svg>`;
     const logoSmall = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="16" height="16"><defs><linearGradient id="lg2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#1d4ed8"/></linearGradient></defs><rect width="32" height="32" rx="8" fill="url(#lg2)"/><circle cx="16" cy="16" r="4" fill="white"/><circle cx="16" cy="7" r="2.5" fill="white" opacity=".8"/><circle cx="16" cy="25" r="2.5" fill="white" opacity=".8"/><circle cx="7" cy="12" r="2.5" fill="white" opacity=".8"/><circle cx="25" cy="12" r="2.5" fill="white" opacity=".8"/></svg>`;
     const wmLogo = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="20" height="20" opacity="0.04"><rect width="32" height="32" rx="8" fill="#1e3a5f"/><circle cx="16" cy="16" r="4" fill="white"/><circle cx="16" cy="7" r="2.5" fill="white"/><circle cx="16" cy="25" r="2.5" fill="white"/><circle cx="7" cy="12" r="2.5" fill="white"/><circle cx="25" cy="12" r="2.5" fill="white"/><circle cx="7" cy="20" r="2.5" fill="white"/><circle cx="25" cy="20" r="2.5" fill="white"/></svg>`;
 
@@ -119,13 +119,13 @@ export class ReportsComponent implements OnInit {
     const taskPct = d.totalTasks ? Math.round((d.completedTasks/d.totalTasks)*100) : 0;
 
     const el = document.createElement('div');
-    el.style.cssText = 'position:fixed;left:-9999px;top:0;width:794px;min-height:1123px;background:white;font-family:Inter,Segoe UI,system-ui,sans-serif;color:#1e293b;font-size:10px;';
+    el.style.cssText = 'position:fixed;left:-9999px;top:0;width:794px;height:1123px;background:white;font-family:Inter,Segoe UI,system-ui,sans-serif;color:#1e293b;font-size:10px;overflow:hidden;';
     el.innerHTML = `
       <div style="position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden;">${wm}</div>
-      <div style="position:relative;z-index:1;">
+      <div style="position:relative;z-index:1;display:flex;flex-direction:column;height:1123px;">
 
         <!-- HEADER with curved colored edge -->
-        <div style="background:linear-gradient(135deg,#0f172a 0%,#1e3a5f 60%,#2563eb 100%);padding:28px 40px 24px;position:relative;overflow:hidden;">
+        <div style="background:linear-gradient(135deg,#0f172a 0%,#1e3a5f 60%,#2563eb 100%);padding:34px 40px 30px;position:relative;overflow:hidden;">
           <div style="position:absolute;bottom:-30px;right:-20px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,0.03);"></div>
           <div style="position:absolute;top:-40px;right:100px;width:150px;height:150px;border-radius:50%;background:rgba(59,130,246,0.1);"></div>
           <div style="position:absolute;bottom:0;left:0;right:0;height:6px;background:linear-gradient(90deg,#3b82f6,#8b5cf6,#06b6d4,#22c55e);"></div>
@@ -133,22 +133,22 @@ export class ReportsComponent implements OnInit {
             <div style="display:flex;align-items:center;gap:14px;">
               ${logo}
               <div>
-                <div style="font-size:24px;font-weight:800;color:white;letter-spacing:-0.5px;">CRM Central</div>
-                <div style="font-size:9px;color:rgba(255,255,255,0.6);font-weight:500;text-transform:uppercase;letter-spacing:3px;margin-top:2px;">Business Performance Report</div>
+                <div style="font-size:28px;font-weight:800;color:white;letter-spacing:-0.5px;">CRM Central</div>
+                <div style="font-size:10px;color:rgba(255,255,255,0.6);font-weight:500;text-transform:uppercase;letter-spacing:3px;margin-top:4px;">Business Performance Report</div>
               </div>
             </div>
             <div style="text-align:right;">
               <div style="font-size:9px;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:1px;">Report Date</div>
-              <div style="font-size:14px;font-weight:700;color:white;margin-top:1px;">${today}</div>
+              <div style="font-size:16px;font-weight:700;color:white;margin-top:2px;">${today}</div>
               <div style="font-size:8px;color:rgba(255,255,255,0.4);margin-top:3px;">Prepared by ${user.firstName || ''} ${user.lastName || ''}</div>
             </div>
           </div>
         </div>
 
-        <div style="padding:20px 40px 30px;">
+        <div style="padding:16px 40px 16px;flex:1;">
 
           <!-- Executive Summary -->
-          <div style="background:linear-gradient(135deg,#f8fafc,#eef2ff);border-left:4px solid #3b82f6;border-radius:0 10px 10px 0;padding:14px 18px;margin-bottom:18px;">
+          <div style="background:linear-gradient(135deg,#f8fafc,#eef2ff);border-left:4px solid #3b82f6;border-radius:0 10px 10px 0;padding:14px 18px;margin-bottom:14px;">
             <div style="font-size:9px;font-weight:700;color:#1e3a5f;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:5px;">Executive Summary</div>
             <div style="font-size:9px;color:#374151;line-height:1.7;">
               This report provides a snapshot of organizational performance across all business functions. Total revenue is <b>$${(d.totalRevenue||0).toLocaleString()}</b> from <b>${d.totalOpportunities}</b> active opportunities averaging <b>$${Math.round(d.avgDealSize||0).toLocaleString()}</b> per deal. The customer portfolio comprises <b>${d.totalCustomers}</b> accounts with <b>${d.totalLeads}</b> leads under management. Support operations maintain a <b>${resolvePct}%</b> resolution rate across <b>${d.totalTickets}</b> tickets.
@@ -156,7 +156,7 @@ export class ReportsComponent implements OnInit {
           </div>
 
           <!-- KPI Cards with rounded corners and gradient borders -->
-          <div style="display:flex;gap:8px;margin-bottom:18px;">
+          <div style="display:flex;gap:8px;margin-bottom:14px;">
             ${[
               {v:'$'+(d.totalRevenue||0).toLocaleString(), l:'Total Revenue', c:'#3b82f6', g:'#dbeafe'},
               {v:String(d.totalCustomers), l:'Customers', c:'#22c55e', g:'#dcfce7'},
@@ -166,14 +166,14 @@ export class ReportsComponent implements OnInit {
             ].map(k => `<div style="flex:1;border-radius:10px;overflow:hidden;border:1px solid ${k.c}22;background:linear-gradient(180deg,${k.g},white);">
               <div style="height:3px;background:${k.c};"></div>
               <div style="padding:12px 10px;text-align:center;">
-                <div style="font-size:20px;font-weight:800;color:${k.c};letter-spacing:-0.5px;">${k.v}</div>
+                <div style="font-size:18px;font-weight:800;color:${k.c};letter-spacing:-0.5px;">${k.v}</div>
                 <div style="font-size:7px;color:#64748b;text-transform:uppercase;letter-spacing:1px;margin-top:3px;font-weight:600;">${k.l}</div>
               </div>
             </div>`).join('')}
           </div>
 
           <!-- Charts Row -->
-          <div style="display:flex;gap:14px;margin-bottom:16px;">
+          <div style="display:flex;gap:14px;margin-bottom:12px;">
             <div style="flex:1.3;border:1px solid #e2e8f0;border-radius:12px;padding:14px 16px;">
               <div style="font-size:9px;font-weight:700;color:#0f172a;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;display:flex;align-items:center;gap:6px;">
                 <div style="width:3px;height:12px;background:#3b82f6;border-radius:2px;"></div> Sales Pipeline
@@ -189,7 +189,7 @@ export class ReportsComponent implements OnInit {
           </div>
 
           <!-- Pipeline Detail Table with rounded corners -->
-          <div style="border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;margin-bottom:16px;">
+          <div style="border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;margin-bottom:12px;">
             <div style="background:linear-gradient(90deg,#f8fafc,#eef2ff);padding:10px 16px;border-bottom:1px solid #e2e8f0;">
               <div style="font-size:9px;font-weight:700;color:#0f172a;text-transform:uppercase;letter-spacing:1px;display:flex;align-items:center;gap:6px;">
                 <div style="width:3px;height:12px;background:#f59e0b;border-radius:2px;"></div> Detailed Pipeline Analysis
@@ -208,7 +208,7 @@ export class ReportsComponent implements OnInit {
           </div>
 
           <!-- Metrics Ring Cards -->
-          <div style="display:flex;gap:10px;margin-bottom:16px;">
+          <div style="display:flex;gap:10px;margin-bottom:12px;">
             <div style="flex:1;border:1px solid #e2e8f0;border-radius:12px;padding:14px;text-align:center;">
               <div style="width:60px;height:60px;border-radius:50%;border:4px solid #f1f5f9;margin:0 auto 8px;position:relative;display:flex;align-items:center;justify-content:center;">
                 <div style="position:absolute;inset:0;border-radius:50%;border:4px solid transparent;border-top-color:#22c55e;border-right-color:${resolvePct>50?'#22c55e':'transparent'};transform:rotate(-45deg);"></div>
@@ -252,11 +252,11 @@ export class ReportsComponent implements OnInit {
 
     document.body.appendChild(el);
     import('html2canvas').then(({ default: html2canvas }) => {
-      html2canvas(el, { scale: 1.5, useCORS: true, backgroundColor: '#ffffff', logging: false }).then(canvas => {
+      html2canvas(el, { scale: 2, useCORS: true, backgroundColor: '#ffffff', logging: false, windowWidth: 794, windowHeight: 1123 }).then(canvas => {
         import('jspdf').then(({ jsPDF }) => {
           const pdf = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4', compress: true });
           const w = 210, h = (canvas.height * w) / canvas.width;
-          pdf.addImage(canvas.toDataURL('image/jpeg', 0.82), 'JPEG', 0, 0, w, Math.min(h, 297));
+          pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 210, 297);
           pdf.save('CRM-Central-Report-' + new Date().toISOString().slice(0,10) + '.pdf');
           document.body.removeChild(el);
           this.exporting = false;
