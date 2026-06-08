@@ -19,6 +19,12 @@ spring:
   cache:
     type: simple
 
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+      enabled: true
+
 server:
   port: ${PORT:8080}
   servlet:
