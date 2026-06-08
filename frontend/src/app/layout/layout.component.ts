@@ -1,141 +1,203 @@
 import { Component } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { AuthService } from '@core/services/auth.service';
 
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive, MatToolbarModule, MatSidenavModule, MatListModule, MatIconModule, MatButtonModule, MatMenuModule, MatBadgeModule, MatDividerModule],
+  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive, MatIconModule, MatButtonModule, MatMenuModule, MatBadgeModule, MatDividerModule, MatTooltipModule],
   template: `
-    <div class="app-container">
-      <aside class="sidebar" [class.collapsed]="sidebarCollapsed">
-        <div class="sidebar-header">
-          <div class="logo" *ngIf="!sidebarCollapsed">
-            <mat-icon class="logo-icon">hub</mat-icon>
-            <span class="logo-text">CRM Central</span>
-          </div>
-          <button mat-icon-button (click)="sidebarCollapsed = !sidebarCollapsed" class="menu-btn">
-            <mat-icon>{{ sidebarCollapsed ? 'menu' : 'menu_open' }}</mat-icon>
-          </button>
+    <div class="layout">
+      <!-- Desktop Sidebar -->
+      <aside class="sidebar" [class.collapsed]="collapsed">
+        <div class="sidebar-top">
+          <div class="logo-area" *ngIf="!collapsed"><mat-icon class="logo-icon">hub</mat-icon><span>CRM Central</span></div>
+          <button mat-icon-button (click)="collapsed=!collapsed" class="toggle-btn"><mat-icon>{{collapsed?'menu':'menu_open'}}</mat-icon></button>
         </div>
-
-        <nav class="sidebar-nav">
-          <div class="nav-section" *ngIf="!sidebarCollapsed"><span class="nav-section-label">OVERVIEW</span></div>
-          <a routerLink="/dashboard" routerLinkActive="active" class="nav-item"><mat-icon>dashboard</mat-icon><span *ngIf="!sidebarCollapsed">Dashboard</span></a>
-
-          <div class="nav-section" *ngIf="!sidebarCollapsed"><span class="nav-section-label">SALES</span></div>
-          <a routerLink="/customers" routerLinkActive="active" class="nav-item"><mat-icon>people</mat-icon><span *ngIf="!sidebarCollapsed">Customers</span></a>
-          <a routerLink="/leads" routerLinkActive="active" class="nav-item"><mat-icon>person_add</mat-icon><span *ngIf="!sidebarCollapsed">Leads</span></a>
-          <a routerLink="/opportunities" routerLinkActive="active" class="nav-item"><mat-icon>trending_up</mat-icon><span *ngIf="!sidebarCollapsed">Deals</span></a>
-          <a routerLink="/pipeline" routerLinkActive="active" class="nav-item"><mat-icon>view_kanban</mat-icon><span *ngIf="!sidebarCollapsed">Pipeline</span></a>
-          <a routerLink="/contacts" routerLinkActive="active" class="nav-item"><mat-icon>contacts</mat-icon><span *ngIf="!sidebarCollapsed">Contacts</span></a>
-
-          <div class="nav-section" *ngIf="!sidebarCollapsed"><span class="nav-section-label">PRODUCTIVITY</span></div>
-          <a routerLink="/activities" routerLinkActive="active" class="nav-item"><mat-icon>event_note</mat-icon><span *ngIf="!sidebarCollapsed">Activities</span></a>
-          <a routerLink="/tasks" routerLinkActive="active" class="nav-item"><mat-icon>task_alt</mat-icon><span *ngIf="!sidebarCollapsed">Tasks</span></a>
-          <a routerLink="/calendar" routerLinkActive="active" class="nav-item"><mat-icon>calendar_today</mat-icon><span *ngIf="!sidebarCollapsed">Calendar</span></a>
-          <a routerLink="/emails" routerLinkActive="active" class="nav-item"><mat-icon>email</mat-icon><span *ngIf="!sidebarCollapsed">Email</span></a>
-          <a routerLink="/documents" routerLinkActive="active" class="nav-item"><mat-icon>folder</mat-icon><span *ngIf="!sidebarCollapsed">Documents</span></a>
-
-          <div class="nav-section" *ngIf="!sidebarCollapsed"><span class="nav-section-label">SUPPORT</span></div>
-          <a routerLink="/tickets" routerLinkActive="active" class="nav-item"><mat-icon>confirmation_number</mat-icon><span *ngIf="!sidebarCollapsed">Tickets</span></a>
-          <a routerLink="/knowledge-base" routerLinkActive="active" class="nav-item"><mat-icon>menu_book</mat-icon><span *ngIf="!sidebarCollapsed">Help Center</span></a>
-
-          <div class="nav-section" *ngIf="!sidebarCollapsed"><span class="nav-section-label">MARKETING</span></div>
-          <a routerLink="/campaigns" routerLinkActive="active" class="nav-item"><mat-icon>campaign</mat-icon><span *ngIf="!sidebarCollapsed">Campaigns</span></a>
-
-          <div class="nav-section" *ngIf="!sidebarCollapsed"><span class="nav-section-label">INSIGHTS</span></div>
-          <a routerLink="/reports" routerLinkActive="active" class="nav-item"><mat-icon>assessment</mat-icon><span *ngIf="!sidebarCollapsed">Reports</span></a>
-
-          <!-- Admin only visible to ADMIN and SUPER_ADMIN -->
+        <nav class="nav">
+          <div class="nav-label" *ngIf="!collapsed">OVERVIEW</div>
+          <a routerLink="/dashboard" routerLinkActive="on" class="nav-link" [matTooltip]="collapsed?'Dashboard':''"><mat-icon>dashboard</mat-icon><span *ngIf="!collapsed">Dashboard</span></a>
+          <div class="nav-label" *ngIf="!collapsed">SALES</div>
+          <a routerLink="/customers" routerLinkActive="on" class="nav-link" [matTooltip]="collapsed?'Customers':''"><mat-icon>people</mat-icon><span *ngIf="!collapsed">Customers</span></a>
+          <a routerLink="/leads" routerLinkActive="on" class="nav-link" [matTooltip]="collapsed?'Leads':''"><mat-icon>person_add</mat-icon><span *ngIf="!collapsed">Leads</span></a>
+          <a routerLink="/opportunities" routerLinkActive="on" class="nav-link" [matTooltip]="collapsed?'Deals':''"><mat-icon>trending_up</mat-icon><span *ngIf="!collapsed">Deals</span></a>
+          <a routerLink="/pipeline" routerLinkActive="on" class="nav-link" [matTooltip]="collapsed?'Pipeline':''"><mat-icon>view_kanban</mat-icon><span *ngIf="!collapsed">Pipeline</span></a>
+          <a routerLink="/contacts" routerLinkActive="on" class="nav-link" [matTooltip]="collapsed?'Contacts':''"><mat-icon>contacts</mat-icon><span *ngIf="!collapsed">Contacts</span></a>
+          <div class="nav-label" *ngIf="!collapsed">WORK</div>
+          <a routerLink="/activities" routerLinkActive="on" class="nav-link" [matTooltip]="collapsed?'Activities':''"><mat-icon>event_note</mat-icon><span *ngIf="!collapsed">Activities</span></a>
+          <a routerLink="/tasks" routerLinkActive="on" class="nav-link" [matTooltip]="collapsed?'Tasks':''"><mat-icon>task_alt</mat-icon><span *ngIf="!collapsed">Tasks</span></a>
+          <a routerLink="/calendar" routerLinkActive="on" class="nav-link" [matTooltip]="collapsed?'Calendar':''"><mat-icon>calendar_today</mat-icon><span *ngIf="!collapsed">Calendar</span></a>
+          <a routerLink="/emails" routerLinkActive="on" class="nav-link" [matTooltip]="collapsed?'Email':''"><mat-icon>email</mat-icon><span *ngIf="!collapsed">Email</span></a>
+          <a routerLink="/documents" routerLinkActive="on" class="nav-link" [matTooltip]="collapsed?'Docs':''"><mat-icon>folder</mat-icon><span *ngIf="!collapsed">Documents</span></a>
+          <div class="nav-label" *ngIf="!collapsed">SUPPORT</div>
+          <a routerLink="/tickets" routerLinkActive="on" class="nav-link" [matTooltip]="collapsed?'Tickets':''"><mat-icon>confirmation_number</mat-icon><span *ngIf="!collapsed">Tickets</span></a>
+          <a routerLink="/knowledge-base" routerLinkActive="on" class="nav-link" [matTooltip]="collapsed?'Help':''"><mat-icon>menu_book</mat-icon><span *ngIf="!collapsed">Help Center</span></a>
+          <div class="nav-label" *ngIf="!collapsed">MORE</div>
+          <a routerLink="/campaigns" routerLinkActive="on" class="nav-link" [matTooltip]="collapsed?'Campaigns':''"><mat-icon>campaign</mat-icon><span *ngIf="!collapsed">Campaigns</span></a>
+          <a routerLink="/reports" routerLinkActive="on" class="nav-link" [matTooltip]="collapsed?'Reports':''"><mat-icon>assessment</mat-icon><span *ngIf="!collapsed">Reports</span></a>
           <ng-container *ngIf="isAdmin">
-            <div class="nav-section" *ngIf="!sidebarCollapsed"><span class="nav-section-label">ADMIN</span></div>
-            <a routerLink="/admin" routerLinkActive="active" class="nav-item"><mat-icon>admin_panel_settings</mat-icon><span *ngIf="!sidebarCollapsed">Admin Center</span></a>
+            <div class="nav-label" *ngIf="!collapsed">ADMIN</div>
+            <a routerLink="/admin" routerLinkActive="on" class="nav-link" [matTooltip]="collapsed?'Admin':''"><mat-icon>admin_panel_settings</mat-icon><span *ngIf="!collapsed">Admin</span></a>
           </ng-container>
         </nav>
-
-        <div class="sidebar-footer">
-          <mat-divider></mat-divider>
-          <a routerLink="/settings" routerLinkActive="active" class="nav-item"><mat-icon>settings</mat-icon><span *ngIf="!sidebarCollapsed">Settings</span></a>
+        <div class="sidebar-bottom">
+          <a routerLink="/settings" routerLinkActive="on" class="nav-link" [matTooltip]="collapsed?'Settings':''"><mat-icon>settings</mat-icon><span *ngIf="!collapsed">Settings</span></a>
         </div>
       </aside>
 
-      <div class="main-wrapper" [class.sidebar-collapsed]="sidebarCollapsed">
-        <header class="header">
-          <div class="header-left">
-            <div class="search-bar">
+      <!-- Main Area -->
+      <div class="main" [class.sidebar-collapsed]="collapsed">
+        <!-- Top Bar -->
+        <header class="topbar">
+          <div class="topbar-left">
+            <button mat-icon-button class="mobile-menu" (click)="mobileMenu=!mobileMenu"><mat-icon>menu</mat-icon></button>
+            <div class="search-bar desktop-only">
               <mat-icon>search</mat-icon>
-              <input placeholder="Search customers, leads, deals..." (keyup.enter)="doSearch($event)" />
+              <input placeholder="Search..." (keyup.enter)="doSearch($event)">
             </div>
           </div>
-          <div class="header-right">
-            <button mat-icon-button routerLink="/notifications" matTooltip="Notifications">
-              <mat-icon matBadge="3" matBadgeColor="warn" matBadgeSize="small">notifications</mat-icon>
-            </button>
-            <div class="user-avatar" [matMenuTriggerFor]="userMenu">
-              <span class="avatar-initials">{{ getInitials() }}</span>
-            </div>
+          <div class="topbar-right">
+            <button mat-icon-button routerLink="/notifications" class="notif-btn"><mat-icon matBadge="3" matBadgeColor="warn" matBadgeSize="small">notifications</mat-icon></button>
+            <div class="avatar" [matMenuTriggerFor]="userMenu">{{ initials }}</div>
             <mat-menu #userMenu="matMenu">
-              <div style="padding:12px 16px;border-bottom:1px solid #eee;">
-                <strong>{{ user?.firstName }} {{ user?.lastName }}</strong>
-                <div style="font-size:12px;color:#666;">{{ user?.email }}</div>
-                <div style="font-size:11px;color:#1976d2;font-weight:600;margin-top:2px;">{{ formatRole(user?.role) }}</div>
-              </div>
+              <div class="user-info"><strong>{{user?.firstName}} {{user?.lastName}}</strong><br><small>{{user?.email}}</small><br><span class="role-tag">{{formatRole(user?.role)}}</span></div>
+              <mat-divider></mat-divider>
               <button mat-menu-item routerLink="/settings"><mat-icon>person</mat-icon>My Account</button>
-              <button mat-menu-item routerLink="/admin" *ngIf="isAdmin"><mat-icon>admin_panel_settings</mat-icon>Admin Center</button>
+              <button mat-menu-item routerLink="/admin" *ngIf="isAdmin"><mat-icon>admin_panel_settings</mat-icon>Admin</button>
               <mat-divider></mat-divider>
               <button mat-menu-item (click)="authService.logout()"><mat-icon>logout</mat-icon>Sign Out</button>
             </mat-menu>
           </div>
         </header>
-        <main class="page-content"><router-outlet></router-outlet></main>
+
+        <!-- Content -->
+        <main class="content"><router-outlet></router-outlet></main>
+
+        <!-- Mobile Bottom Nav -->
+        <nav class="mobile-nav">
+          <a routerLink="/dashboard" routerLinkActive="on"><mat-icon>dashboard</mat-icon><span>Home</span></a>
+          <a routerLink="/customers" routerLinkActive="on"><mat-icon>people</mat-icon><span>Clients</span></a>
+          <a routerLink="/pipeline" routerLinkActive="on"><mat-icon>view_kanban</mat-icon><span>Pipeline</span></a>
+          <a routerLink="/tasks" routerLinkActive="on"><mat-icon>task_alt</mat-icon><span>Tasks</span></a>
+          <a [matMenuTriggerFor]="moreMenu"><mat-icon>more_horiz</mat-icon><span>More</span></a>
+          <mat-menu #moreMenu="matMenu">
+            <button mat-menu-item routerLink="/leads"><mat-icon>person_add</mat-icon>Leads</button>
+            <button mat-menu-item routerLink="/opportunities"><mat-icon>trending_up</mat-icon>Deals</button>
+            <button mat-menu-item routerLink="/contacts"><mat-icon>contacts</mat-icon>Contacts</button>
+            <button mat-menu-item routerLink="/activities"><mat-icon>event_note</mat-icon>Activities</button>
+            <button mat-menu-item routerLink="/calendar"><mat-icon>calendar_today</mat-icon>Calendar</button>
+            <button mat-menu-item routerLink="/emails"><mat-icon>email</mat-icon>Email</button>
+            <button mat-menu-item routerLink="/documents"><mat-icon>folder</mat-icon>Documents</button>
+            <button mat-menu-item routerLink="/tickets"><mat-icon>confirmation_number</mat-icon>Tickets</button>
+            <button mat-menu-item routerLink="/campaigns"><mat-icon>campaign</mat-icon>Campaigns</button>
+            <button mat-menu-item routerLink="/reports"><mat-icon>assessment</mat-icon>Reports</button>
+            <button mat-menu-item routerLink="/knowledge-base"><mat-icon>menu_book</mat-icon>Help Center</button>
+            <button mat-menu-item routerLink="/notifications"><mat-icon>notifications</mat-icon>Notifications</button>
+            <button mat-menu-item routerLink="/settings"><mat-icon>settings</mat-icon>Settings</button>
+            <button mat-menu-item routerLink="/admin" *ngIf="isAdmin"><mat-icon>admin_panel_settings</mat-icon>Admin</button>
+          </mat-menu>
+        </nav>
       </div>
+
+      <!-- Mobile slide menu overlay -->
+      <div class="mobile-overlay" *ngIf="mobileMenu" (click)="mobileMenu=false"></div>
     </div>
   `,
   styles: [`
-    .app-container{display:flex;min-height:100vh}
-    .sidebar{width:260px;height:100vh;position:fixed;left:0;top:0;background:linear-gradient(180deg,#0f172a 0%,#1e293b 100%);color:white;display:flex;flex-direction:column;z-index:1000;transition:width .3s ease;overflow-x:hidden;overflow-y:auto}
-    .sidebar.collapsed{width:64px}
-    .sidebar-header{padding:16px;display:flex;align-items:center;justify-content:space-between;height:64px;border-bottom:1px solid rgba(255,255,255,.08)}
-    .logo{display:flex;align-items:center;gap:10px}
-    .logo-icon{color:#3b82f6;font-size:28px;width:28px;height:28px}
-    .logo-text{font-size:17px;font-weight:700;white-space:nowrap;letter-spacing:-.3px}
-    .menu-btn{color:rgba(255,255,255,.6)}
-    .sidebar-nav{flex:1;padding:8px}
-    .nav-section{padding:16px 12px 4px}
-    .nav-section-label{font-size:10px;font-weight:700;letter-spacing:1.2px;color:rgba(255,255,255,.35);text-transform:uppercase}
-    .nav-item{display:flex;align-items:center;gap:12px;padding:9px 12px;border-radius:8px;color:rgba(255,255,255,.6);text-decoration:none;transition:all .15s;margin-bottom:1px;white-space:nowrap;font-size:13.5px}
-    .nav-item:hover{background:rgba(255,255,255,.08);color:rgba(255,255,255,.9)}
-    .nav-item.active{background:rgba(59,130,246,.15);color:#60a5fa}
-    .nav-item mat-icon{font-size:20px;width:20px;height:20px}
-    .sidebar-footer{padding:8px}
-    .sidebar-footer mat-divider{border-color:rgba(255,255,255,.08);margin:4px 0}
-    .main-wrapper{flex:1;margin-left:260px;transition:margin-left .3s;background:#f8fafc}
-    .main-wrapper.sidebar-collapsed{margin-left:64px}
-    .header{height:64px;background:white;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;z-index:100}
-    .header-left .search-bar{display:flex;align-items:center;background:#f1f5f9;border-radius:10px;padding:0 14px;width:380px;border:1px solid transparent;transition:all .2s}
-    .header-left .search-bar:focus-within{border-color:#3b82f6;background:white;box-shadow:0 0 0 3px rgba(59,130,246,.1)}
-    .header-left .search-bar input{border:none;outline:none;padding:10px;background:transparent;width:100%;font-size:14px}
-    .header-left .search-bar mat-icon{color:#94a3b8;font-size:20px}
-    .header-right{display:flex;align-items:center;gap:12px}
-    .user-avatar{width:36px;height:36px;border-radius:50%;background:#3b82f6;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .15s}
-    .user-avatar:hover{transform:scale(1.05)}
-    .avatar-initials{color:white;font-size:13px;font-weight:700}
-    .page-content{padding:24px}
-    @media(max-width:768px){.sidebar{width:64px}.sidebar .nav-section,.sidebar .logo-text,.sidebar .nav-item span{display:none}.main-wrapper{margin-left:64px !important}.header-left .search-bar{width:200px}}
+    .layout{display:flex;min-height:100vh}
+
+    /* ─── Sidebar (desktop) ─── */
+    .sidebar{width:240px;height:100vh;position:fixed;left:0;top:0;background:linear-gradient(180deg,#0f172a,#1e293b);color:white;display:flex;flex-direction:column;z-index:100;transition:width .25s;overflow-x:hidden;overflow-y:auto}
+    .sidebar.collapsed{width:60px}
+    .sidebar-top{padding:12px;display:flex;align-items:center;justify-content:space-between;gap:8px;border-bottom:1px solid rgba(255,255,255,.06)}
+    .logo-area{display:flex;align-items:center;gap:8px;white-space:nowrap}
+    .logo-icon{color:#60a5fa;font-size:24px;width:24px;height:24px}
+    .logo-area span{font-size:15px;font-weight:700}
+    .toggle-btn{color:rgba(255,255,255,.5)}
+    .nav{flex:1;padding:6px;overflow-y:auto}
+    .nav-label{padding:12px 10px 4px;font-size:9px;font-weight:700;letter-spacing:1.2px;color:rgba(255,255,255,.25);text-transform:uppercase}
+    .nav-link{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;color:rgba(255,255,255,.55);text-decoration:none;font-size:13px;transition:all .15s;white-space:nowrap;margin-bottom:1px}
+    .nav-link:hover{background:rgba(255,255,255,.07);color:rgba(255,255,255,.85)}
+    .nav-link.on{background:rgba(59,130,246,.12);color:#60a5fa}
+    .nav-link mat-icon{font-size:18px;width:18px;height:18px;flex-shrink:0}
+    .sidebar-bottom{padding:6px;border-top:1px solid rgba(255,255,255,.06)}
+
+    /* ─── Main ─── */
+    .main{flex:1;margin-left:240px;transition:margin-left .25s;display:flex;flex-direction:column;min-height:100vh}
+    .main.sidebar-collapsed{margin-left:60px}
+
+    /* ─── Top bar ─── */
+    .topbar{height:52px;background:white;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;padding:0 16px;position:sticky;top:0;z-index:50;flex-shrink:0}
+    .topbar-left{display:flex;align-items:center;gap:8px}
+    .topbar-right{display:flex;align-items:center;gap:8px}
+    .mobile-menu{display:none}
+    .search-bar{display:flex;align-items:center;background:#f1f5f9;border-radius:10px;padding:0 10px;width:300px;border:1px solid transparent;transition:all .2s}
+    .search-bar:focus-within{border-color:#3b82f6;background:white}
+    .search-bar input{border:none;outline:none;padding:7px;width:100%;font-size:13px;background:transparent}
+    .search-bar mat-icon{color:#94a3b8;font-size:18px;width:18px;height:18px}
+    .avatar{width:32px;height:32px;border-radius:50%;background:#3b82f6;color:white;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;cursor:pointer}
+    .user-info{padding:12px 16px;line-height:1.5}
+    .user-info small{color:#64748b;font-size:12px}
+    .role-tag{display:inline-block;background:#eff6ff;color:#3b82f6;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;margin-top:4px}
+
+    /* ─── Content ─── */
+    .content{flex:1;padding:0}
+
+    /* ─── Mobile Bottom Nav ─── */
+    .mobile-nav{display:none}
+    .mobile-overlay{display:none}
+
+    /* ═══ TABLET ═══ */
+    @media(max-width:900px){
+      .sidebar{width:60px}
+      .sidebar .nav-label,.sidebar .logo-area span,.sidebar .nav-link span{display:none}
+      .main{margin-left:60px}
+      .main.sidebar-collapsed{margin-left:60px}
+      .search-bar{width:200px}
+    }
+
+    /* ═══ MOBILE ═══ */
+    @media(max-width:640px){
+      .sidebar{display:none}
+      .main{margin-left:0 !important;padding-bottom:56px}
+      .mobile-menu{display:inline-flex !important}
+      .desktop-only{display:none !important}
+      .topbar{height:48px;padding:0 12px}
+      .content{padding:0}
+
+      /* Bottom navigation */
+      .mobile-nav{
+        display:flex;position:fixed;bottom:0;left:0;right:0;height:56px;
+        background:white;border-top:1px solid #e2e8f0;z-index:100;
+        justify-content:space-around;align-items:center;
+        box-shadow:0 -2px 10px rgba(0,0,0,.05);
+      }
+      .mobile-nav a{
+        display:flex;flex-direction:column;align-items:center;gap:2px;
+        text-decoration:none;color:#94a3b8;font-size:10px;padding:4px 8px;
+        border-radius:8px;transition:all .15s;
+      }
+      .mobile-nav a.on{color:#3b82f6}
+      .mobile-nav a mat-icon{font-size:20px;width:20px;height:20px}
+
+      /* Mobile slide overlay */
+      .mobile-overlay{display:block;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:90}
+
+      .notif-btn{transform:scale(.9)}
+      .avatar{width:28px;height:28px;font-size:11px}
+    }
   `]
 })
 export class LayoutComponent {
-  sidebarCollapsed = false;
+  collapsed = false;
+  mobileMenu = false;
   user: any;
 
   constructor(public authService: AuthService, private router: Router) {
@@ -143,21 +205,8 @@ export class LayoutComponent {
     authService.currentUser$.subscribe(u => this.user = u);
   }
 
-  get isAdmin(): boolean {
-    return this.user?.role === 'SUPER_ADMIN' || this.user?.role === 'ADMIN';
-  }
-
-  getInitials(): string {
-    if (!this.user) return '?';
-    return (this.user.firstName?.[0] || '') + (this.user.lastName?.[0] || '');
-  }
-
-  formatRole(role: string): string {
-    return (role || '').replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase());
-  }
-
-  doSearch(event: any) {
-    const q = event.target?.value;
-    if (q) this.router.navigate(['/search'], { queryParams: { q } });
-  }
+  get isAdmin(): boolean { return this.user?.role === 'SUPER_ADMIN' || this.user?.role === 'ADMIN'; }
+  get initials(): string { return (this.user?.firstName?.[0] || '') + (this.user?.lastName?.[0] || ''); }
+  formatRole(r: string): string { return (r || '').replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()); }
+  doSearch(e: any) { const q = e.target?.value; if (q) this.router.navigate(['/search'], { queryParams: { q } }); }
 }
