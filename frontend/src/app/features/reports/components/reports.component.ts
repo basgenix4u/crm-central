@@ -252,11 +252,11 @@ export class ReportsComponent implements OnInit {
 
     document.body.appendChild(el);
     import('html2canvas').then(({ default: html2canvas }) => {
-      html2canvas(el, { scale: 2, useCORS: true, backgroundColor: '#ffffff', logging: false, windowWidth: 794, windowHeight: 1123 }).then(canvas => {
+      html2canvas(el, { scale: 1.8, useCORS: true, backgroundColor: '#ffffff', logging: false, windowWidth: 794, windowHeight: 1123, imageTimeout: 0 }).then(canvas => {
         import('jspdf').then(({ jsPDF }) => {
           const pdf = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4', compress: true });
           const w = 210, h = (canvas.height * w) / canvas.width;
-          pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 210, 297);
+          pdf.addImage(canvas.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, 210, 297);
           pdf.save('CRM-Central-Report-' + new Date().toISOString().slice(0,10) + '.pdf');
           document.body.removeChild(el);
           this.exporting = false;

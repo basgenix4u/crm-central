@@ -189,6 +189,8 @@ import { AuthService } from '@core/services/auth.service';
 
     /* ─── Mobile Bottom Nav ─── */
     .mobile-nav{display:none}
+    .mobile-drawer{display:none}
+    .mobile-overlay{display:none}
     .mobile-overlay{display:none}
 
     /* ═══ TABLET ═══ */
@@ -210,6 +212,8 @@ import { AuthService } from '@core/services/auth.service';
       .content{padding:0}
 
       /* Bottom navigation */
+      .mobile-drawer{display:flex !important;flex-direction:column}
+      .mobile-overlay{display:block !important}
       .mobile-nav{
         display:flex;position:fixed;bottom:0;left:0;right:0;height:56px;
         background:white;border-top:1px solid #e2e8f0;z-index:100;
