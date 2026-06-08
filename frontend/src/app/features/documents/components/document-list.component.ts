@@ -32,6 +32,14 @@ import { DocViewerComponent } from './doc-viewer.component';
 
         <!-- Document list - card style for mobile friendliness -->
         <div *ngIf="!loading && documents.length > 0">
+          <div class="doc-header">
+            <div style="width:24px;"></div>
+            <div style="flex:1;">Name</div>
+            <div class="doc-header-col">Type</div>
+            <div class="doc-header-col">Size</div>
+            <div class="doc-header-col">Date</div>
+            <div style="width:40px;"></div>
+          </div>
           <div *ngFor="let doc of documents" class="doc-row" (click)="viewDoc(doc)">
             <mat-icon class="doc-icon" [style.color]="getColor(doc.type)">{{ getIcon(doc.type) }}</mat-icon>
             <div class="doc-info">
@@ -71,7 +79,10 @@ import { DocViewerComponent } from './doc-viewer.component';
     .doc-meta{display:flex;align-items:center;gap:8px;margin-top:3px;font-size:11px;color:#64748b;flex-wrap:wrap}
     .doc-badge{background:#f1f5f9;color:#475569;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:600;text-transform:uppercase}
     .doc-date{color:#94a3b8}
+    .doc-header{display:flex;align-items:center;gap:12px;padding:8px 16px;background:#f8fafc;border-bottom:1px solid #e2e8f0;font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.5px}
+    .doc-header-col{width:70px;text-align:left}
     @media(max-width:640px){
+      .doc-header{display:none}
       .doc-row{padding:10px 12px;gap:10px}
       .doc-name{font-size:12px}
       .doc-meta{font-size:10px;gap:6px}

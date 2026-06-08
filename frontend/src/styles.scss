@@ -13,8 +13,6 @@
   --text: #0f172a;
   --text-sec: #64748b;
   --border: #e2e8f0;
-  --sidebar-w: 260px;
-  --header-h: 56px;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -142,43 +140,25 @@ body {
 //  MOBILE RESPONSIVE - Compact intelligent design
 // ═══════════════════════════════════════════════════
 
-// Tablets (768px)
+// Tablets
 @media (max-width: 768px) {
-  :root { --sidebar-w: 0px; --header-h: 52px; }
-  
   .page-container { padding: 12px; }
   .page-header {
     flex-direction: row; flex-wrap: wrap;
     h1 { font-size: 18px; flex: 1; }
-    .actions { 
-      .search-bar { display: none; } // hide search on mobile, use global search icon
-    }
   }
-
   .card { padding: 14px; border-radius: 10px; margin-bottom: 12px; }
   .stats-grid { grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
   .stat-card {
     padding: 12px; gap: 10px;
-    .stat-icon { width: 36px; height: 36px; border-radius: 8px; mat-icon { font-size: 18px; } }
+    .stat-icon { width: 36px; height: 36px; border-radius: 8px; }
     .stat-info { .stat-value { font-size: 16px; } .stat-label { font-size: 11px; } }
   }
-
   .data-table {
     .mat-mdc-header-cell { font-size: 11px; padding: 8px 6px; }
     .mat-mdc-cell { font-size: 12px; padding: 8px 6px; }
   }
-
   .form-container .form-row { grid-template-columns: 1fr; }
-  .empty-state { padding: 24px 16px; .empty-icon { font-size: 40px; } h3 { font-size: 14px; } }
-
-  .pipeline-board {
-    gap: 8px;
-    .pipeline-column { min-width: 200px; padding: 10px; }
-    .pipeline-card { padding: 10px; .deal-name { font-size: 12px; } .deal-amount { font-size: 14px; } }
-  }
-
-  // Hide less important table columns on tablets
-  .hide-tablet { display: none !important; }
 }
 
 // Phones (480px)
