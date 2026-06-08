@@ -87,111 +87,67 @@ export class ReportsComponent implements OnInit {
     const d = this.data;
     const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
     const user = JSON.parse(localStorage.getItem('crm_user') || '{}');
-    const companyName = 'CRM Central';
 
-    const svgLogo = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="40" height="40"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#1d4ed8"/></linearGradient></defs><rect width="32" height="32" rx="8" fill="url(#g)"/><circle cx="16" cy="16" r="4" fill="white"/><circle cx="16" cy="7" r="2.5" fill="white" opacity=".9"/><circle cx="16" cy="25" r="2.5" fill="white" opacity=".9"/><circle cx="7" cy="12" r="2.5" fill="white" opacity=".9"/><circle cx="25" cy="12" r="2.5" fill="white" opacity=".9"/><circle cx="7" cy="20" r="2.5" fill="white" opacity=".9"/><circle cx="25" cy="20" r="2.5" fill="white" opacity=".9"/></svg>`;
+    // Create report in a hidden div, render to canvas, then save as PDF
+    const reportDiv = document.createElement('div');
+    reportDiv.style.cssText = 'position:fixed;left:-9999px;top:0;width:794px;background:white;padding:40px;font-family:Arial,sans-serif;color:#1e293b;font-size:12px;';
+    reportDiv.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:16px;border-bottom:3px solid #3b82f6;margin-bottom:24px;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:44px;height:44px;background:linear-gradient(135deg,#3b82f6,#1d4ed8);border-radius:10px;display:flex;align-items:center;justify-content:center;color:white;font-size:22px;font-weight:bold;">C</div>
+          <div><div style="font-size:20px;font-weight:800;color:#0f172a;">CRM Central</div><div style="font-size:9px;color:#3b82f6;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;">Business Intelligence Report</div></div>
+        </div>
+        <div style="text-align:right;"><div style="font-size:15px;font-weight:700;color:#0f172a;">Performance Report</div><div style="font-size:10px;color:#64748b;">${today}</div><div style="font-size:9px;color:#94a3b8;">Prepared by ${user.firstName || ''} ${user.lastName || ''}</div></div>
+      </div>
 
-    const html = `<!DOCTYPE html><html><head><title>Business Report - ${companyName}</title>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-@page{size:A4;margin:0}
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',system-ui,sans-serif}
-body{width:210mm;min-height:297mm;margin:0 auto;background:white;color:#1e293b;font-size:11px}
-.page{padding:24mm 20mm 30mm;position:relative;min-height:297mm}
-.header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;padding-bottom:16px;border-bottom:3px solid #3b82f6}
-.logo-area{display:flex;align-items:center;gap:12px}
-.logo-area h1{font-size:20px;font-weight:800;color:#0f172a;letter-spacing:-0.5px}
-.logo-area .subtitle{font-size:9px;color:#3b82f6;font-weight:600;text-transform:uppercase;letter-spacing:1.5px}
-.report-meta{text-align:right}
-.report-meta .report-title{font-size:16px;font-weight:700;color:#0f172a}
-.report-meta .report-date{font-size:10px;color:#64748b;margin-top:2px}
-.report-meta .report-by{font-size:9px;color:#94a3b8;margin-top:2px}
-.section{margin-bottom:20px}
-.section h2{font-size:14px;font-weight:700;color:#0f172a;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;gap:6px}
-.section h2::before{content:'';width:4px;height:16px;background:#3b82f6;border-radius:2px}
-.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
-.stat{background:linear-gradient(135deg,#f8fafc,#f1f5f9);border:1px solid #e2e8f0;border-radius:8px;padding:14px;text-align:center}
-.stat .val{font-size:22px;font-weight:800;color:#3b82f6}
-.stat .lbl{font-size:9px;color:#64748b;margin-top:2px;text-transform:uppercase;letter-spacing:0.5px}
-.stat.green .val{color:#16a34a}
-.stat.purple .val{color:#9333ea}
-.stat.orange .val{color:#ea580c}
-table{width:100%;border-collapse:collapse;margin:8px 0}
-th{background:#f1f5f9;padding:8px 10px;text-align:left;font-size:10px;font-weight:600;color:#475569;border-bottom:2px solid #e2e8f0}
-td{padding:8px 10px;border-bottom:1px solid #f1f5f9;font-size:10px}
-tr:nth-child(even) td{background:#fafbfc}
-.bar-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
-.bar-label{width:80px;font-size:10px;color:#475569}
-.bar-track{flex:1;height:6px;background:#e2e8f0;border-radius:3px;overflow:hidden}
-.bar-fill{height:100%;border-radius:3px}
-.bar-val{width:40px;text-align:right;font-size:10px;font-weight:600}
-.footer{position:fixed;bottom:0;left:0;right:0;padding:10mm 20mm;background:linear-gradient(135deg,#0f172a,#1e293b);color:white;display:flex;justify-content:space-between;align-items:center}
-.footer-left{font-size:9px;opacity:0.8}
-.footer-center{font-size:8px;opacity:0.5;text-align:center}
-.footer-right{font-size:9px;opacity:0.8}
-.watermark{position:fixed;bottom:40mm;right:20mm;font-size:72px;color:rgba(59,130,246,0.03);font-weight:900;transform:rotate(-30deg)}
-</style></head><body>
-<div class="page">
-<div class="header">
-  <div class="logo-area">
-    ${svgLogo}
-    <div><h1>CRM Central</h1><div class="subtitle">Business Intelligence Report</div></div>
-  </div>
-  <div class="report-meta">
-    <div class="report-title">Performance Report</div>
-    <div class="report-date">${today}</div>
-    <div class="report-by">Prepared by ${user.firstName || ''} ${user.lastName || ''}</div>
-  </div>
-</div>
+      <div style="font-size:14px;font-weight:700;color:#0f172a;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #e2e8f0;">📊 Revenue & Sales</div>
+      <div style="display:flex;gap:10px;margin-bottom:20px;">
+        <div style="flex:1;background:linear-gradient(135deg,#eff6ff,#dbeafe);border:1px solid #bfdbfe;border-radius:10px;padding:14px;text-align:center;"><div style="font-size:22px;font-weight:800;color:#3b82f6;">$${(d.totalRevenue||0).toLocaleString()}</div><div style="font-size:9px;color:#64748b;margin-top:2px;text-transform:uppercase;">Total Revenue</div></div>
+        <div style="flex:1;background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:1px solid #bbf7d0;border-radius:10px;padding:14px;text-align:center;"><div style="font-size:22px;font-weight:800;color:#16a34a;">${d.totalOpportunities}</div><div style="font-size:9px;color:#64748b;margin-top:2px;text-transform:uppercase;">Active Deals</div></div>
+        <div style="flex:1;background:linear-gradient(135deg,#fff7ed,#ffedd5);border:1px solid #fed7aa;border-radius:10px;padding:14px;text-align:center;"><div style="font-size:22px;font-weight:800;color:#ea580c;">$${Math.round(d.avgDealSize||0).toLocaleString()}</div><div style="font-size:9px;color:#64748b;margin-top:2px;text-transform:uppercase;">Avg Deal Size</div></div>
+      </div>
 
-<div class="section"><h2>Revenue & Sales</h2>
-<div class="stats-row">
-  <div class="stat"><div class="val">\$${(d.totalRevenue||0).toLocaleString()}</div><div class="lbl">Total Revenue</div></div>
-  <div class="stat green"><div class="val">${d.totalOpportunities}</div><div class="lbl">Active Deals</div></div>
-  <div class="stat orange"><div class="val">\$${Math.round(d.avgDealSize||0).toLocaleString()}</div><div class="lbl">Avg Deal Size</div></div>
-</div></div>
+      <div style="font-size:14px;font-weight:700;color:#0f172a;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #e2e8f0;">👥 Customers & Leads</div>
+      <div style="display:flex;gap:10px;margin-bottom:20px;">
+        <div style="flex:1;background:linear-gradient(135deg,#faf5ff,#f3e8ff);border:1px solid #e9d5ff;border-radius:10px;padding:14px;text-align:center;"><div style="font-size:22px;font-weight:800;color:#9333ea;">${d.totalCustomers}</div><div style="font-size:9px;color:#64748b;margin-top:2px;text-transform:uppercase;">Customers</div></div>
+        <div style="flex:1;background:linear-gradient(135deg,#eff6ff,#dbeafe);border:1px solid #bfdbfe;border-radius:10px;padding:14px;text-align:center;"><div style="font-size:22px;font-weight:800;color:#3b82f6;">${d.totalContacts}</div><div style="font-size:9px;color:#64748b;margin-top:2px;text-transform:uppercase;">Contacts</div></div>
+        <div style="flex:1;background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:1px solid #bbf7d0;border-radius:10px;padding:14px;text-align:center;"><div style="font-size:22px;font-weight:800;color:#16a34a;">${d.totalLeads}</div><div style="font-size:9px;color:#64748b;margin-top:2px;text-transform:uppercase;">Leads</div></div>
+      </div>
 
-<div class="section"><h2>Pipeline Breakdown</h2>
-<table><tr><th>Stage</th><th>Deals</th><th>Total Value</th><th>Avg Value</th></tr>
-${Object.entries(d.pipelineMetrics||{}).map(([s,v])=>`<tr><td>${s.replace('_',' ')}</td><td>${(v as any).count||0}</td><td>\$${((v as any).amount||0).toLocaleString()}</td><td>\$${(v as any).count?Math.round((v as any).amount/(v as any).count).toLocaleString():'0'}</td></tr>`).join('')}
-</table></div>
+      <div style="font-size:14px;font-weight:700;color:#0f172a;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #e2e8f0;">🎯 Pipeline Breakdown</div>
+      <table style="width:100%;border-collapse:collapse;margin-bottom:20px;">
+        <tr><th style="background:#f1f5f9;padding:8px 10px;text-align:left;font-size:10px;font-weight:600;color:#475569;border-bottom:2px solid #e2e8f0;">Stage</th><th style="background:#f1f5f9;padding:8px 10px;text-align:right;font-size:10px;font-weight:600;color:#475569;border-bottom:2px solid #e2e8f0;">Deals</th><th style="background:#f1f5f9;padding:8px 10px;text-align:right;font-size:10px;font-weight:600;color:#475569;border-bottom:2px solid #e2e8f0;">Value</th></tr>
+        ${Object.entries(d.pipelineMetrics||{}).map(([s,v]) => '<tr><td style="padding:8px 10px;border-bottom:1px solid #f1f5f9;font-size:11px;">'+s.replace('_',' ')+'</td><td style="padding:8px 10px;border-bottom:1px solid #f1f5f9;font-size:11px;text-align:right;">'+((v as any).count||0)+'</td><td style="padding:8px 10px;border-bottom:1px solid #f1f5f9;font-size:11px;text-align:right;font-weight:600;">$'+((v as any).amount||0).toLocaleString()+'</td></tr>').join('')}
+      </table>
 
-<div class="section"><h2>Customer & Contacts</h2>
-<div class="stats-row">
-  <div class="stat purple"><div class="val">${d.totalCustomers}</div><div class="lbl">Customers</div></div>
-  <div class="stat"><div class="val">${d.totalContacts}</div><div class="lbl">Contacts</div></div>
-  <div class="stat green"><div class="val">${d.totalLeads}</div><div class="lbl">Leads</div></div>
-</div></div>
+      <div style="font-size:14px;font-weight:700;color:#0f172a;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #e2e8f0;">🎫 Support & Tasks</div>
+      <div style="display:flex;gap:10px;margin-bottom:20px;">
+        <div style="flex:1;background:linear-gradient(135deg,#fff7ed,#ffedd5);border:1px solid #fed7aa;border-radius:10px;padding:14px;text-align:center;"><div style="font-size:22px;font-weight:800;color:#ea580c;">${d.totalTickets}</div><div style="font-size:9px;color:#64748b;margin-top:2px;text-transform:uppercase;">Tickets</div></div>
+        <div style="flex:1;background:linear-gradient(135deg,#fef2f2,#fecaca);border:1px solid #fca5a5;border-radius:10px;padding:14px;text-align:center;"><div style="font-size:22px;font-weight:800;color:#dc2626;">${d.openTickets}</div><div style="font-size:9px;color:#64748b;margin-top:2px;text-transform:uppercase;">Open</div></div>
+        <div style="flex:1;background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:1px solid #bbf7d0;border-radius:10px;padding:14px;text-align:center;"><div style="font-size:22px;font-weight:800;color:#16a34a;">${d.completedTasks}/${d.totalTasks}</div><div style="font-size:9px;color:#64748b;margin-top:2px;text-transform:uppercase;">Tasks Done</div></div>
+      </div>
 
-<div class="section"><h2>Support & Operations</h2>
-<div class="stats-row">
-  <div class="stat orange"><div class="val">${d.totalTickets}</div><div class="lbl">Total Tickets</div></div>
-  <div class="stat"><div class="val">${d.openTickets}</div><div class="lbl">Open Tickets</div></div>
-  <div class="stat green"><div class="val">${d.completedTasks}/${d.totalTasks}</div><div class="lbl">Tasks Done</div></div>
-</div></div>
+      <div style="margin-top:30px;padding-top:14px;border-top:2px solid #0f172a;display:flex;justify-content:space-between;align-items:center;">
+        <div style="font-size:8px;color:#94a3b8;">CRM Central &bull; Enterprise CRM Platform</div>
+        <div style="font-size:8px;color:#94a3b8;">CONFIDENTIAL &bull; ${today}</div>
+        <div style="font-size:8px;color:#94a3b8;">Page 1 of 1</div>
+      </div>
+    `;
 
-<div class="section"><h2>Marketing</h2>
-<div class="stats-row">
-  <div class="stat"><div class="val">${d.totalCampaigns}</div><div class="lbl">Campaigns</div></div>
-  <div class="stat purple"><div class="val">${d.totalActivities}</div><div class="lbl">Activities</div></div>
-  <div class="stat"><div class="val">${d.totalContacts}</div><div class="lbl">Reach</div></div>
-</div></div>
+    document.body.appendChild(reportDiv);
 
-<div class="watermark">CRM</div>
-</div>
-
-<div class="footer">
-  <div class="footer-left">CRM Central &bull; Enterprise CRM Platform</div>
-  <div class="footer-center">CONFIDENTIAL &bull; ${today}</div>
-  <div class="footer-right">Page 1 of 1</div>
-</div>
-</body></html>`;
-
-    const win = window.open('', '_blank');
-    if (win) {
-      win.document.write(html);
-      win.document.close();
-      setTimeout(() => win.print(), 600);
-    }
+    import('html2canvas').then(({ default: html2canvas }) => {
+      html2canvas(reportDiv, { scale: 2, useCORS: true, backgroundColor: '#ffffff' }).then(canvas => {
+        import('jspdf').then(({ jsPDF }) => {
+          const pdf = new jsPDF('p', 'mm', 'a4');
+          const imgWidth = 210;
+          const imgHeight = (canvas.height * imgWidth) / canvas.width;
+          const imgData = canvas.toDataURL('image/png');
+          pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, Math.min(imgHeight, 297));
+          pdf.save('CRM-Report-' + new Date().toISOString().slice(0, 10) + '.pdf');
+          document.body.removeChild(reportDiv);
+        });
+      });
+    });
   }
 }

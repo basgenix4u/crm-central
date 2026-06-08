@@ -30,6 +30,11 @@ public class Document extends BaseEntity {
     private String checksum;
     private boolean shared;
 
+    @com.fasterxml.jackson.annotation.JsonIgnore
+    @Lob
+    @Column(columnDefinition = "BYTEA")
+    private byte[] fileData;
+
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")

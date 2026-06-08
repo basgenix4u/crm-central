@@ -27,7 +27,9 @@
     "ng2-charts": "^5.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.6.0",
-    "zone.js": "~0.14.0"
+    "zone.js": "~0.14.0",
+    "jspdf": "^2.5.1",
+    "html2canvas": "^1.4.1"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^17.3.0",
