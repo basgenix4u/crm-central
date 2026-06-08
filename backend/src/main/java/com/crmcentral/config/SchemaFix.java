@@ -20,7 +20,10 @@ public class SchemaFix {
                 
                 // Add file_data column if it doesn't exist
                 try {
-                    stmt.execute("ALTER TABLE documents ADD COLUMN IF NOT EXISTS file_data BYTEA");
+                    stmt.execute("DO $$ BEGIN " +
+                        "IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='documents' AND column_name='file_data') THEN " +
+                        "ALTER TABLE documents ADD COLUMN file_data BYTEA; " +
+                        "END IF; END $$");
                     log.info("Schema fix: file_data column ensured");
                 } catch (Exception e) {
                     log.warn("Schema fix: file_data column already exists or error: {}", e.getMessage());

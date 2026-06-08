@@ -31,8 +31,7 @@ public class Document extends BaseEntity {
     private boolean shared;
 
     @com.fasterxml.jackson.annotation.JsonIgnore
-    @Lob
-    @Column(columnDefinition = "BYTEA")
+    @Column(name = "file_data", columnDefinition = "BYTEA")
     private byte[] fileData;
 
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
