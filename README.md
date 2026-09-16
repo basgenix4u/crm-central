@@ -1,22 +1,22 @@
-# 🏢 CRM Central
-
 <div align="center">
 
-![CRM Central](https://img.shields.io/badge/CRM-Central-1976d2?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0id2hpdGUiIGQ9Ik0xMiAyQzYuNDggMiAyIDYuNDggMiAxMnM0LjQ4IDEwIDEwIDEwIDEwLTQuNDggMTAtMTBTMTcuNTIgMiAxMiAyem0wIDE4Yy00LjQyIDAtOC0zLjU4LTgtOHMzLjU4LTggOC04IDggMy41OCA4IDgtMy41OCA4LTggNHoiLz48L3N2Zz4=)
-![Java](https://img.shields.io/badge/Java-21-orange?style=for-the-badge&logo=openjdk)
-![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.2-green?style=for-the-badge&logo=springboot)
-![Angular](https://img.shields.io/badge/Angular-17-red?style=for-the-badge&logo=angular)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-blue?style=for-the-badge&logo=postgresql)
-![Redis](https://img.shields.io/badge/Redis-7-red?style=for-the-badge&logo=redis)
-![Docker](https://img.shields.io/badge/Docker-Ready-blue?style=for-the-badge&logo=docker)
+# 🏢 CRM Central
 
 **Enterprise-grade Customer Relationship Management Platform**
 
-[Features](#features) • [Architecture](#architecture) • [Getting Started](#getting-started) • [API Documentation](#api-documentation) • [Deployment](#deployment)
+[![Java](https://img.shields.io/badge/Java-21-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)](https://www.oracle.com/java/)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
+[![Angular](https://img.shields.io/badge/Angular-17-DD0031?style=for-the-badge&logo=angular&logoColor=white)](https://angular.io)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org)
+[![Redis](https://img.shields.io/badge/Redis-7-DC382D?style=for-the-badge&logo=redis&logoColor=white)](https://redis.io)
+[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com)
+
+[Features](#-features) · [Architecture](#-architecture) · [Getting Started](#-getting-started) · [API Documentation](#-api-documentation) · [Deployment](#-deployment)
 
 </div>
 
 ---
+
 
 ## 📋 Overview
 
@@ -390,13 +390,13 @@ crm-central/
 
 ## 📄 License
 
-Copyright © 2024 CRM Central. All rights reserved.
+Released under the [MIT License](./LICENSE).
 
 ---
 
 <div align="center">
-  <p>Built with ❤️ for modern businesses</p>
-  <p>
-    <strong>CRM Central</strong> — Your Complete Business Operating Platform
-  </p>
+**CRM Central** — Your Complete Business Operating Platform
+
+Built with ❤️ for modern businesses · [Abdulbasit Abdulalim](https://github.com/basgenix4u)
+
 </div>
